@@ -6,13 +6,27 @@
   <script src="https://unpkg.com/react@15/dist/react.js"></script>
   <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.23.1/babel.min.js"></script>
+
 </head>
 
 <body>
   <script type="text/babel" src="./js/menu.js"></script>
+  <!--<script type="text/babel" src="./js/map.js"></script>-->
+
   <div id="container">
     <div id="menu" />
     <div id="content" />
+    <script>
+    function initMap() {
+      // Create a map object and specify the DOM element for display.
+      var map = new google.maps.Map(document.getElementById('content'), {
+        center: {lat: -34.397, lng: 150.644},
+        scrollwheel: false,
+        zoom: 8
+      });
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA&callback=initMap"></script>
     <div id="footer" />
   </div>
 </body>

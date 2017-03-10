@@ -16,6 +16,7 @@ class Menu extends React.Component {
         <ul>
           <li><a href="javascript:void(0)">Main</a></li>
           <li><a href="javascript:void(0)">Sign</a></li>
+          <li><a href="javascript:void(0)">Contact us</a></li>
         </ul>
       </div>
     )
