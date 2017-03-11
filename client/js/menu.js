@@ -12,11 +12,12 @@ class Menu extends React.Component {
 
   render(){
     return (
-      <div>
+      <div style={{padding:30}}>
         <ul>
-          <li><a href="javascript:void(0)">Main</a></li>
-          <li><a href="javascript:void(0)">Sign</a></li>
-          <li><a href="javascript:void(0)">Contact us</a></li>
+          <li style={{padding:10, display:"inline"}}><a href="javascript:;">Main</a></li>
+          <li style={{padding:10, display:"inline"}}><a href="javascript:;">Sign</a></li>
+          <li style={{padding:10, display:"inline"}}><a href="javascript:;">Contact us</a></li>
+          <li style={{padding:10, display:"inline"}}><a href="../admin/admin.php">Admin</a></li>
         </ul>
       </div>
     )
