@@ -112,16 +112,21 @@ class Map extends React.Component {
     }
 
   renderSearchMap(){
-
+    return (
+      <div>
+        <div>Search</div>
+        <div><input style={{width:"100%"}} type="text" name="searchmap_keyword" placeholder="Key any words" /></div>
+      </div>
+    )
   }
 
   render(){
     return (
       <div style={{}}>
         <div style={{}} id="searchmap" ref="searchmap">{this.renderSearchMap()}</div>
-        <div style={{float:'left'}}  id="mapList" ref="mapList">{this.renderMapList()}</div>
-        <div style={{float:"left"}} id="map" ref="map"></div>
-        <div style={{paddingTop: 620,}} id="addmap" ref="addmap">{this.renderAddMap()}</div>
+        <div style={{marginTop: 10, float:'left'}}  id="mapList" ref="mapList">{this.renderMapList()}</div>
+        <div style={{marginTop: 10, float:"left"}} id="map" ref="map"></div>
+          <div style={{paddingTop: 630,}} id="addmap" ref="addmap">{this.renderAddMap()}</div>
       </div>
     );
   }
