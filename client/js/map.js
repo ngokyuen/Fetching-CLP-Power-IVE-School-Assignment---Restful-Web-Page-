@@ -8,6 +8,7 @@ class Map extends React.Component {
       searchMapKeyword: null,
       searchMapKeywordResult: null,
       showSearchMapKeywordResult: false,
+      searchMapDetailResult: [],
     }
   }
 
@@ -20,6 +21,8 @@ class Map extends React.Component {
     if (nextState.markers != null && this.state.markers != nextState.markers){
       return true;
     } else if (nextState.searchMapKeywordResult != null && this.statesearchMapKeywordResult != nextState.searchMapKeywordResult){
+      return true;
+    } else if (nextState.searchMapDetailResult != null && this.searchMapDetailResult != nextState.searchMapDetailResult){
       return true;
     }
 
@@ -51,7 +54,6 @@ class Map extends React.Component {
   }
 
   initMarker(nextState){
-
     for (const markerJSON of nextState.markers){
       const marker = new google.maps.Marker({
         map: nextState.map,
@@ -101,30 +103,40 @@ class Map extends React.Component {
         }
       },1000)
     }
+  }
 
+  async feedGetMapDetailByPlaceId(place_id){
+    try {
+      const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapDetailByPlaceId=" + place_id);
+      const response = await query.json();
+
+      this.state.searchMapDetailResult.push(response);
+      // this.setState({searchMapDetailResult: showSearchMapDetailResult});
+      console.log(response);
+    } catch (e){
+      console.log(e);
+    }
   }
 
   async feedSearchMapKeyword(keyword){
     try {
       const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapKeyword=" + keyword);
       const response = await query.json();
-      // const result = await response.json();
-      //alert(result);
       this.setState({searchMapKeywordResult: response});
-
       console.log(response);
     } catch (e) {
       console.log(e);
     }
   }
 
-  async changeSearchMapKeywordResult(request){
+  changeSearchMapKeywordResult(request){
     this.setState({showSearchMapKeywordResult: request});
   }
 
   clickSearchMapKeywordResultItem(place_id){
     console.log(place_id);
-    this.changeSearchMapKeywordResult(false)
+    this.changeSearchMapKeywordResult(false);
+    this.feedGetMapDetailByPlaceId(place_id);
     // alert(place_id);
   }
 
@@ -132,27 +144,36 @@ class Map extends React.Component {
 
     if (this.state.searchMapKeywordResult != null && this.state.searchMapKeywordResult.stationList.station.status == "OK"){
       return <div style={{position:'absolute',width:900, zIndex:9999}}>{this.state.searchMapKeywordResult.stationList.station.predictions.map(search=>
-        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)} style={{padding:20, borderStyle:'solid',borderWidth:1,backgroundColor:'white'}} key={search.id}>
+        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)} style={{padding:20, borderStyle:'solid',borderWidth:1,backgroundColor:'white', width:'100%'}} key={search.id}>
           <div>{search.description}</div>
         </div>
       )}</div>
     }
+  }
 
+  renderAddMapList(){
+    if (this.state.searchMapDetailResult != null){
+      for (const {result} = this.state.searchMapDetailResult.stationList.station){
+        const {lat, lng} = result.geometry.location;
+        return (
+          <div>
+            
+          </div>
+        )
+      }
+    }
   }
 
   renderAddMap(){
     return (
       <div>
-        <div>
-          <div></div>
-          <div></div>
-        </div>
+        {this.renderAddMapList()}
         <div style={{width:"100%"}}>
           <div>Provider</div>
           <div><input style={{width:"100%",}} type="text" name="provider" placeholder="Enter Your Name or Contact" /></div>
         </div>
         <div style={{width:"100%",textAlign:"center", padding:10,}}>
-          <div style={{ display:'inline-block'}}><button>Submit</button></div>
+          <div style={{display:'inline-block'}}><button>Submit</button></div>
           <div style={{display:'inline-block'}}><button>Reset</button></div>
         </div>
       </div>
@@ -171,14 +192,13 @@ class Map extends React.Component {
          )}
          </div>;
       }
-
     }
 
   renderSearchMap(){
     return (
-      <div>
+      <div onMouseEnter={()=>this.changeSearchMapKeywordResult(true)} onBlur={()=>this.changeSearchMapKeywordResult(false)}>
         <div>Search</div>
-        <div><input onFocus={()=>this.changeSearchMapKeywordResult(true)} onBlur={()=>this.changeSearchMapKeywordResult(false)}  onChange={this.changeSearchMapKeyword.bind(this)} autoComplete="off" style={{width:"100%"}} type="text" name="searchmap_keyword" placeholder="Enter any place keywords" /></div>
+        <div><input onChange={this.changeSearchMapKeyword.bind(this)} autoComplete="off" style={{width:"100%"}} type="text" name="searchmap_keyword" placeholder="Enter any place keywords" /></div>
         {(this.state.showSearchMapKeywordResult)?this.renderSearchMapResult():null}
       </div>
     )

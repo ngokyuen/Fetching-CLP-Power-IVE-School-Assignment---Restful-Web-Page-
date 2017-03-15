@@ -6,6 +6,7 @@ class Station extends Generate {
 
     private $no, $address;
     private $searchMapKeyword;
+    private $searchMapDetailByPlaceId;
 
     public function __construct($sql) {
       parent::__construct($sql);
@@ -13,6 +14,10 @@ class Station extends Generate {
 
     public function add() {
 
+    }
+
+    private function setSearchMapDetailByPlaceId($place_id){
+      $this->searchMapDetailByPlaceId = $place_id;
     }
 
     private function setAddress($address) {
@@ -28,8 +33,10 @@ class Station extends Generate {
     }
 
     public function getAll() {
-
-      if ($this->searchMapKeyword){
+      if ($this->searchMapDetailByPlaceId){
+        return $this->getMapDetailByPlaceId();
+      }
+      else if ($this->searchMapKeyword){
         return $this->searchMapKeyword();
       } else {
         $query = "SELECT * FROM station";
@@ -65,9 +72,13 @@ class Station extends Generate {
       if (isset($_gets['searchMapKeyword']) && $_gets['searchMapKeyword'] != ""){
         $this->setSearchMapKeyword($_gets['searchMapKeyword']);
       }
+      if (isset($_gets['searchMapDetailByPlaceId']) && $_gets['searchMapDetailByPlaceId'] != ""){
+        $this->setSearchMapDetailByPlaceId($_gets['searchMapDetailByPlaceId']);
+      }
 
       foreach ($_gets as $key => $value) {
-        if ($key != "no" && $key != "address" && $key != "format" && $key != "lang" && $key != "searchMapKeyword") {
+        if ($key != "no" && $key != "address" && $key != "format" && $key != "lang" &&
+         $key != "searchMapKeyword" && $key != "searchMapDetailByPlaceId") {
           return array("code" => '1200', "msg" => "Parameter not recognized");
         }
       }
@@ -82,9 +93,17 @@ class Station extends Generate {
     public function searchMapKeyword(){
 
       $query = "https://maps.googleapis.com/maps/api/place/queryautocomplete/json?input=" . urlencode($this->searchMapKeyword) . "&types=geocode&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA";
-
       $json = file_get_contents($query);
       $json_obj =  json_decode($json, true);
+
+      return $json_obj;
+    }
+
+    public function getMapDetailByPlaceId(){
+
+      $query = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" . $this->searchMapDetailByPlaceId . "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA";
+      $json = file_get_contents($query);
+      $json_obj = json_decode($json, true);
 
       return $json_obj;
     }
