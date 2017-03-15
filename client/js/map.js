@@ -20,9 +20,9 @@ class Map extends React.Component {
   shouldComponentUpdate(nextProps, nextState){
     if (nextState.markers != null && this.state.markers != nextState.markers){
       return true;
-    } else if (nextState.searchMapKeywordResult != null && this.statesearchMapKeywordResult != nextState.searchMapKeywordResult){
+    } else if (nextState.searchMapKeywordResult != null && this.state.statesearchMapKeywordResult != nextState.searchMapKeywordResult){
       return true;
-    } else if (nextState.searchMapDetailResult != null && this.searchMapDetailResult != nextState.searchMapDetailResult){
+    } else if (nextState.searchMapDetailResult.length > 0 && this.state.searchMapDetailResult != nextState.searchMapDetailResult){
       return true;
     }
 
@@ -59,7 +59,6 @@ class Map extends React.Component {
         map: nextState.map,
         animation: google.maps.Animation.DROP,
         label: markerJSON.no,
-        //animation: google.maps.Animation.BOUNCE,
         position: {lat: parseFloat(markerJSON.lat), lng: parseFloat(markerJSON.lng)}
       });
       marker.addListener('click', () => {
@@ -79,7 +78,6 @@ class Map extends React.Component {
         });
         infoWindow.open(nextState.map, marker);
       })
-      // marker.setMap(this.state.map);
     }
   }
 
@@ -109,9 +107,7 @@ class Map extends React.Component {
     try {
       const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapDetailByPlaceId=" + place_id);
       const response = await query.json();
-
       this.state.searchMapDetailResult.push(response);
-      // this.setState({searchMapDetailResult: showSearchMapDetailResult});
       console.log(response);
     } catch (e){
       console.log(e);
@@ -135,16 +131,16 @@ class Map extends React.Component {
 
   clickSearchMapKeywordResultItem(place_id){
     console.log(place_id);
-    this.changeSearchMapKeywordResult(false);
     this.feedGetMapDetailByPlaceId(place_id);
-    // alert(place_id);
+
+    this.changeSearchMapKeywordResult(false);
   }
 
   renderSearchMapResult(){
 
     if (this.state.searchMapKeywordResult != null && this.state.searchMapKeywordResult.stationList.station.status == "OK"){
       return <div style={{position:'absolute',width:900, zIndex:9999}}>{this.state.searchMapKeywordResult.stationList.station.predictions.map(search=>
-        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)} style={{padding:20, borderStyle:'solid',borderWidth:1,backgroundColor:'white', width:'100%'}} key={search.id}>
+        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)} style={{ borderStyle:'solid',borderWidth:1,backgroundColor:'white', width:'100%'}} key={search.id}>
           <div>{search.description}</div>
         </div>
       )}</div>
@@ -152,15 +148,16 @@ class Map extends React.Component {
   }
 
   renderAddMapList(){
-    if (this.state.searchMapDetailResult != null){
-      for (const {result} = this.state.searchMapDetailResult.stationList.station){
-        const {lat, lng} = result.geometry.location;
-        return (
-          <div>
-            
-          </div>
-        )
-      }
+    if (this.state.searchMapDetailResult.length > 0){
+
+      return (
+        <div>
+          {this.state.searchMapDetailResult.map(mapdetail=>{
+            const {result}= mapdetail.stationList.station;
+            return <div key={result.place_id}>{result.formatted_address}</div>
+          })}
+        </div>
+      );
     }
   }
 
