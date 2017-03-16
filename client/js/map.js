@@ -5,10 +5,6 @@ class Map extends React.Component {
     this.state = {
       map: null,
       markers: null,
-      searchMapKeyword: null,
-      searchMapKeywordResult: null,
-      showSearchMapKeywordResult: false,
-      searchMapDetailResult: [],
     }
   }
 
@@ -20,17 +16,16 @@ class Map extends React.Component {
   shouldComponentUpdate(nextProps, nextState){
     if (nextState.markers != null && this.state.markers != nextState.markers){
       return true;
-    } else if (nextState.searchMapKeywordResult != null && this.state.statesearchMapKeywordResult != nextState.searchMapKeywordResult){
-      return true;
-    } else if (nextState.searchMapDetailResult.length > 0 && this.state.searchMapDetailResult != nextState.searchMapDetailResult){
-      return true;
     }
+    // else if (nextState.searchMapDetailResult.length > 0 && this.state.searchMapDetailResult.length != nextState.searchMapDetailResult.length){
+    //   return true;
+    // }
 
     return false;
   }
 
   componentWillUpdate(nextProps, nextState){
-    if (nextState.markers != null){
+    if (nextState.markers != null && this.state.markers != nextState.markers){
       this.initMarker(nextState);
     }
   }
@@ -90,92 +85,7 @@ class Map extends React.Component {
     this.setState({map: map});
   }
 
-  changeSearchMapKeyword(e){
-    const keyword = encodeURI(e.target.value);
-    this.setState({searchMapKeyword: keyword});
 
-    if (keyword.length > 3) {
-      setTimeout(()=>{
-        if (keyword == this.state.searchMapKeyword){
-          this.feedSearchMapKeyword(keyword);
-        }
-      },1000)
-    }
-  }
-
-  async feedGetMapDetailByPlaceId(place_id){
-    try {
-      const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapDetailByPlaceId=" + place_id);
-      const response = await query.json();
-      this.state.searchMapDetailResult.push(response);
-      console.log(response);
-    } catch (e){
-      console.log(e);
-    }
-  }
-
-  async feedSearchMapKeyword(keyword){
-    try {
-      const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapKeyword=" + keyword);
-      const response = await query.json();
-      this.setState({searchMapKeywordResult: response});
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  changeSearchMapKeywordResult(request){
-    this.setState({showSearchMapKeywordResult: request});
-  }
-
-  clickSearchMapKeywordResultItem(place_id){
-    console.log(place_id);
-    this.feedGetMapDetailByPlaceId(place_id);
-
-    this.changeSearchMapKeywordResult(false);
-  }
-
-  renderSearchMapResult(){
-
-    if (this.state.searchMapKeywordResult != null && this.state.searchMapKeywordResult.stationList.station.status == "OK"){
-      return <div style={{position:'absolute',width:900, zIndex:9999}}>{this.state.searchMapKeywordResult.stationList.station.predictions.map(search=>
-        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)} style={{ borderStyle:'solid',borderWidth:1,backgroundColor:'white', width:'100%'}} key={search.id}>
-          <div>{search.description}</div>
-        </div>
-      )}</div>
-    }
-  }
-
-  renderAddMapList(){
-    if (this.state.searchMapDetailResult.length > 0){
-
-      return (
-        <div>
-          {this.state.searchMapDetailResult.map(mapdetail=>{
-            const {result}= mapdetail.stationList.station;
-            return <div key={result.place_id}>{result.formatted_address}</div>
-          })}
-        </div>
-      );
-    }
-  }
-
-  renderAddMap(){
-    return (
-      <div>
-        {this.renderAddMapList()}
-        <div style={{width:"100%"}}>
-          <div>Provider</div>
-          <div><input style={{width:"100%",}} type="text" name="provider" placeholder="Enter Your Name or Contact" /></div>
-        </div>
-        <div style={{width:"100%",textAlign:"center", padding:10,}}>
-          <div style={{display:'inline-block'}}><button>Submit</button></div>
-          <div style={{display:'inline-block'}}><button>Reset</button></div>
-        </div>
-      </div>
-    )
-  }
 
   renderMapList(){
 
@@ -191,23 +101,16 @@ class Map extends React.Component {
       }
     }
 
-  renderSearchMap(){
-    return (
-      <div onMouseEnter={()=>this.changeSearchMapKeywordResult(true)} onBlur={()=>this.changeSearchMapKeywordResult(false)}>
-        <div>Search</div>
-        <div><input onChange={this.changeSearchMapKeyword.bind(this)} autoComplete="off" style={{width:"100%"}} type="text" name="searchmap_keyword" placeholder="Enter any place keywords" /></div>
-        {(this.state.showSearchMapKeywordResult)?this.renderSearchMapResult():null}
-      </div>
-    )
-  }
+
 
   render(){
+    const root = RootReducerStore;
     return (
       <div style={{}}>
-        <div style={{}} id="searchmap" ref="searchmap">{this.renderSearchMap()}</div>
+        <SearchMapKeyword store={root} />
         <div style={{marginTop: 10, float:'left'}}  id="mapList" ref="mapList">{this.renderMapList()}</div>
         <div style={{marginTop: 10, float:"left"}} id="map" ref="map"></div>
-          <div style={{paddingTop: 630,}} id="addmap" ref="addmap">{this.renderAddMap()}</div>
+        <AddMap store={root} />
       </div>
     );
   }
