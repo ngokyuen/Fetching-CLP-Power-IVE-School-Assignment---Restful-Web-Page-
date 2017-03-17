@@ -17,9 +17,6 @@ class Map extends React.Component {
     if (nextState.markers != null && this.state.markers != nextState.markers){
       return true;
     }
-    // else if (nextState.searchMapDetailResult.length > 0 && this.state.searchMapDetailResult.length != nextState.searchMapDetailResult.length){
-    //   return true;
-    // }
 
     return false;
   }
@@ -85,8 +82,6 @@ class Map extends React.Component {
     this.setState({map: map});
   }
 
-
-
   renderMapList(){
 
       if (this.state.markers) {
@@ -100,8 +95,6 @@ class Map extends React.Component {
          </div>;
       }
     }
-
-
 
   render(){
     const root = RootReducerStore;

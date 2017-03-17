@@ -7,18 +7,13 @@ class SearchMapKeywordComponent extends React.Component {
       searchMapKeyword: null,
       searchMapKeywordResult: null,
       showSearchMapKeywordResult: false,
-      searchMapDetailResult: [],
     }
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    //alert(nextState);
     if (nextState.searchMapKeywordResult != null && this.state.statesearchMapKeywordResult != nextState.searchMapKeywordResult){
       return true;
     }
-    // else if (nextState.searchMapDetailResult.length > 0 && this.state.searchMapDetailResult.length != nextState.searchMapDetailResult.length){
-    //   return true;
-    // }
 
     return false;
   }
@@ -26,7 +21,6 @@ class SearchMapKeywordComponent extends React.Component {
   clickSearchMapKeywordResultItem(place_id){
     console.log(place_id);
     this.feedGetMapDetailByPlaceId(place_id);
-    // this.forceUpdate();
     this.changeSearchMapKeywordResult(false);
   }
 
@@ -34,10 +28,7 @@ class SearchMapKeywordComponent extends React.Component {
     try {
       const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapDetailByPlaceId=" + place_id);
       const response = await query.json();
-      let array = this.state.searchMapDetailResult;
-      array.push(response);
-      this.setState({searchMapDetailResult: array});
-      // this.forceUpdate();
+      this.props.dispatch({type:'addMapListItem', payload: response});
       console.log(response);
     } catch (e){
       console.log(e);
@@ -85,7 +76,7 @@ class SearchMapKeywordComponent extends React.Component {
   render(){
     return (
       <div style={{}} id="searchmap" ref="searchmap">
-        <div onMouseEnter={()=>{this.changeSearchMapKeywordResult(false);this.changeSearchMapKeywordResult(true);}} onMouseLeave={()=>this.changeSearchMapKeywordResult(false)}  onBlur={()=>this.changeSearchMapKeywordResult(false)}>
+        <div onFocus={()=>this.changeSearchMapKeywordResult(true)} onMouseEnter={()=>this.changeSearchMapKeywordResult(true)} onMouseLeave={()=>this.changeSearchMapKeywordResult(false)} >
           <div>Search</div>
           <div><input onChange={this.changeSearchMapKeyword.bind(this)} autoComplete="off" style={{width:"100%"}} type="text" name="searchmap_keyword" placeholder="Enter any place keywords" /></div>
           {(this.state.showSearchMapKeywordResult)?this.renderSearchMapResult():null}
