@@ -12,8 +12,12 @@ class Station extends Generate {
       parent::__construct($sql);
     }
 
-    public function add() {
+    public function inputMapDetail($_json_post) {
+      $json = json_decode($_json_post);
+      $query = "INSERT INTO user_station " .
+      "(name, short_name, long_time, lat, lng, formatted_address, place_id, provider, is_approved) VALUES (".
 
+      . ");";
     }
 
     private function setSearchMapDetailByPlaceId($place_id){
@@ -78,7 +82,7 @@ class Station extends Generate {
 
       foreach ($_gets as $key => $value) {
         if ($key != "no" && $key != "address" && $key != "format" && $key != "lang" &&
-         $key != "searchMapKeyword" && $key != "searchMapDetailByPlaceId") {
+         $key != "searchMapKeyword" && $key != "searchMapDetailByPlaceId" && $key != "addMapDetail") {
           return array("code" => '1200', "msg" => "Parameter not recognized");
         }
       }

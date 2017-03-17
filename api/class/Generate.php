@@ -18,7 +18,6 @@ class Generate extends Basic {
     }
 
     public function output($result_array) {
-
         switch ($this->format) {
             case 'xml':
                 return $this->outputXML($result_array);
