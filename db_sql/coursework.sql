@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2017 at 02:27 AM
+-- Generation Time: Mar 17, 2017 at 01:07 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -28,6 +28,7 @@ USE `coursework`;
 -- Table structure for table `station`
 --
 
+DROP TABLE IF EXISTS `station`;
 CREATE TABLE `station` (
   `_id` int(11) NOT NULL,
   `no` int(11) NOT NULL,
@@ -41,7 +42,29 @@ CREATE TABLE `station` (
   `provider` varchar(255) NOT NULL,
   `parkingNo` varchar(255) NOT NULL,
   `img` text NOT NULL,
-  `lang` varchar(255) NOT NULL
+  `lang` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_station`
+--
+
+DROP TABLE IF EXISTS `user_station`;
+CREATE TABLE `user_station` (
+  `_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `short_name` varchar(255) NOT NULL,
+  `long_name` varchar(255) NOT NULL,
+  `lat` double NOT NULL,
+  `lng` double NOT NULL,
+  `formatted_address` varchar(255) NOT NULL,
+  `place_id` varchar(255) NOT NULL,
+  `provider` varchar(255) NOT NULL,
+  `is_approved` tinyint(4) DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -55,6 +78,12 @@ ALTER TABLE `station`
   ADD PRIMARY KEY (`_id`);
 
 --
+-- Indexes for table `user_station`
+--
+ALTER TABLE `user_station`
+  ADD PRIMARY KEY (`_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -62,6 +91,11 @@ ALTER TABLE `station`
 -- AUTO_INCREMENT for table `station`
 --
 ALTER TABLE `station`
+  MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `user_station`
+--
+ALTER TABLE `user_station`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

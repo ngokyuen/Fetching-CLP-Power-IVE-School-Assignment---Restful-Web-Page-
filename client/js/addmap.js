@@ -4,10 +4,21 @@ class AddMapComponent extends React.Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      provider: '',
+    }
   }
 
   clickDelete(place_id){
     this.props.dispatch({type:"deleteMapListItem", payload:place_id});
+  }
+
+  clickSubmit(){
+    this.props.dispatch({type:"addMapListItemsToApi", payload: this.props.Map.addMapListItems});
+  }
+
+  providerChange(e){
+    this.setState({provider: e.target.value});
   }
 
   renderAddMapList(){
@@ -35,10 +46,10 @@ class AddMapComponent extends React.Component {
         {this.renderAddMapList()}
         <div style={{width:"100%"}}>
           <div>Provider</div>
-          <div><input style={{width:"100%",}} type="text" name="provider" placeholder="Enter Your Name or Contact" /></div>
+          <div><input style={{width:"100%",}} onChange={(e)=>this.providerChange(e)} value={this.state.provider} type="text" name="provider" placeholder="Enter Your Name or Contact" /></div>
         </div>
         <div style={{width:"100%",textAlign:"center", padding:10,}}>
-          <div style={{display:'inline-block'}}><button>Submit</button></div>
+          <div style={{display:'inline-block'}}><button onClick={()=>this.clickSubmit()}>Submit</button></div>
         </div>
       </div>
     )

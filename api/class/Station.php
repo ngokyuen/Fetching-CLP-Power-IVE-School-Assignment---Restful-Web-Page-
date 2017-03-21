@@ -13,11 +13,13 @@ class Station extends Generate {
     }
 
     public function inputMapDetail($_json_post) {
-      $json = json_decode($_json_post);
-      $query = "INSERT INTO user_station " .
-      "(name, short_name, long_time, lat, lng, formatted_address, place_id, provider, is_approved) VALUES (".
-
-      . ");";
+      //  $json = json_decode($_json_post);
+       Header('Content-type: text/json');
+      // $query = "INSERT INTO user_station " .
+      // "(name, short_name, long_time, lat, lng, formatted_address, place_id, provider, is_approved) VALUES (".
+      // "'{$json['name']}', '{$json['short_name']}'" .
+      // ");";
+      echo ($_json_post);
     }
 
     private function setSearchMapDetailByPlaceId($place_id){
@@ -82,7 +84,7 @@ class Station extends Generate {
 
       foreach ($_gets as $key => $value) {
         if ($key != "no" && $key != "address" && $key != "format" && $key != "lang" &&
-         $key != "searchMapKeyword" && $key != "searchMapDetailByPlaceId" && $key != "addMapDetail") {
+         $key != "searchMapKeyword" && $key != "searchMapDetailByPlaceId" && $key != "action") {
           return array("code" => '1200', "msg" => "Parameter not recognized");
         }
       }
