@@ -12,14 +12,40 @@ class Station extends Generate {
       parent::__construct($sql);
     }
 
-    public function inputMapDetail($_json_post) {
-      //  $json = json_decode($_json_post);
-       Header('Content-type: text/json');
-      // $query = "INSERT INTO user_station " .
-      // "(name, short_name, long_time, lat, lng, formatted_address, place_id, provider, is_approved) VALUES (".
-      // "'{$json['name']}', '{$json['short_name']}'" .
-      // ");";
-      echo ($_json_post);
+    public function inputMapDetail($mapdetails, $provider) {
+
+      try {
+        $map_detail_array = json_decode(urldecode($mapdetails));
+         //print_r($json_array);
+        $provider = urldecode($provider);
+        //print_r($json_array[0]->html_attributions);
+        foreach($map_detail_array as $item){
+          $result = $item->result;
+          $address_components = $result->address_components;
+          $location = $result->geometry->location;
+
+          $name = $result->name;
+          $short_name = $address_components[0]->short_name;
+          $long_name = $address_components[0]->long_name;
+          $lat = $location->lat;
+          $lng = $location->lng;
+          $formatted_address = $result->formatted_address;
+
+          $query = "INSERT INTO user_station " .
+          "(name, short_name, long_name, lat, lng, formatted_address, provider) VALUES (" .
+          "'{$name}', '{$short_name}', '{$long_name}', '{$lat}', '{$lng}', '{$formatted_address}', '{$provider}'" .
+          ");";
+
+          $this->sql->query($query);
+        }
+
+        Header('Content-type: text/json');
+        $result = array("error"=>"", "result"=>"true");
+        echo json_encode($result);
+
+      } catch (Exception $e){
+        echo $e->getMessage();
+      }
     }
 
     private function setSearchMapDetailByPlaceId($place_id){

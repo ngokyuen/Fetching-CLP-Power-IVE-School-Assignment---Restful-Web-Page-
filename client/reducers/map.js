@@ -2,6 +2,11 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'clearMapListItems':
+      state.addMapListItems = [];
+      return {
+        ...state,
+      }
     case 'addMapListItem':
       const data = action.payload.stationList.station;
       state.addMapListItems.push(data);
@@ -18,16 +23,27 @@ const MapStoreReducer = (state=[], action)=> {
       }
     case 'addMapListItemsToApi':
         try {
-          const response = fetch('http://localhost:81/coursework/api/api.php?format=json&lang=en&action=addMapDetail',
-          {headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }, method: "POST", body: 'data='+ encodeURIComponent(JSON.stringify(action.payload))}
-        );
+          fetch('http://localhost:81/coursework/api/api.php?format=json&lang=en&action=addMapDetail',{
+            method: "POST",
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+            body: 'provider='+ encodeURIComponent(action.payload.provider) +'&mapdetails='+ encodeURIComponent(JSON.stringify(action.payload.mapdetails))}
+          ).then(function(response){
+            //console.log(encodeURIComponent(JSON.stringify(action.payload.mapdetails)));
+            //alert(response.json());
+            response.json().then(function (json){
+              if (json.result === 'true') {
+                alert("Create Successfully");
+                action.dispatch({type:'clearMapListItems'});
+              }
 
+            });
+
+          })
           return {
-            ...state,
+            ...state
           }
+        // console.log(encodeURIComponent(JSON.stringify(action.payload.mapdetails)));
+
         } catch (e) {
           console.log(e);
         }

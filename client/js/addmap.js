@@ -14,7 +14,7 @@ class AddMapComponent extends React.Component {
   }
 
   clickSubmit(){
-    this.props.dispatch({type:"addMapListItemsToApi", payload: this.props.Map.addMapListItems});
+    this.props.dispatch({type:"addMapListItemsToApi", dispatch: this.props.dispatch, payload: {"provider": this.state.provider , "mapdetails": this.props.Map.addMapListItems}});
   }
 
   providerChange(e){
@@ -49,7 +49,7 @@ class AddMapComponent extends React.Component {
           <div><input style={{width:"100%",}} onChange={(e)=>this.providerChange(e)} value={this.state.provider} type="text" name="provider" placeholder="Enter Your Name or Contact" /></div>
         </div>
         <div style={{width:"100%",textAlign:"center", padding:10,}}>
-          <div style={{display:'inline-block'}}><button onClick={()=>this.clickSubmit()}>Submit</button></div>
+          <div style={{display:'inline-block'}}><button onClick={this.clickSubmit.bind(this)}>Submit</button></div>
         </div>
       </div>
     )

@@ -10,7 +10,7 @@ if ($error = $station->importURLRequest($_GET)) {
 } else if (isset($_GET['action'])) {
     switch($_GET['action']){
       case 'addMapDetail':
-        return $station->inputMapDetail($_POST['data']);
+        return $station->inputMapDetail($_POST['mapdetails'], $_POST['provider']);
       break;
     }
 } else {
