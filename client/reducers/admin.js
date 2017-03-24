@@ -32,7 +32,7 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'login_fail':
       return {
-        ...state, login: action.payload.result,
+        ...state, login: action.payload.result, token: '',
       }
     default:
       return {
