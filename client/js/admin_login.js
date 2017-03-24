@@ -19,7 +19,7 @@ class AdminLoginComponent extends React.Component {
   }
 
   clickLoginButton(){
-    this.props.dispatch({type:'login', payload: {username:this.state.username, password:this.state.password}});
+    this.props.dispatch({dispatch:this.props.dispatch, type:'login', payload: {username:this.state.username, password:this.state.password}});
   }
 
   render(){
@@ -33,7 +33,7 @@ class AdminLoginComponent extends React.Component {
           <input type="password" value={this.state.password} onChange={(e)=>this.changePassword(e)} name="password" placeholder="Password" />
         </div>
         <div style={{marginTop:10, textAlign: "center"}}>
-          <input onClick={this.clickLoginButton.bind(this)} type="button" value="Submit" />
+          <input onClick={(e)=>this.clickLoginButton(e)} type="button" value="Submit" />
         </div>
       </div>
     );

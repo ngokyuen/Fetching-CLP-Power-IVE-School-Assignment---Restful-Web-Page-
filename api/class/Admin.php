@@ -9,13 +9,15 @@ class Admin extends Generate {
     }
 
     public function login($username, $password){
-      $query = "SELECT * FROM user";
-      $query .= " WHERE username='{$username}' AND password='{$password}'";
-
+      $query = "SELECT _id,username,type,token FROM user";
+      $query .= " WHERE username='" . urldecode($username) . "' AND password='" . urldecode($password) . "' AND type='admin'";
+      //echo $query;
       $response = $this->sql->query($query);
+      Header('Content-type: text/json');
       if ($result = $response->fetch_all(MYSQLI_ASSOC)){
-        Header('Content-type: text/json');
-        echo json_encode(array("result"=>true, "data"=>$result));
+        return json_encode(array("result"=>true, "data"=>$result[0]));
+      } else {
+        return json_encode(array("result"=>false));
       }
     }
 }

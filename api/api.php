@@ -11,7 +11,7 @@ $admin = new Admin($SQL);
 if (isset($_GET['action'])) {
   switch($_GET['action']){
     case 'login':
-      return $admin->login($_POST['username'], $_POST['password']);
+      echo $admin->login($_POST['username'], $_POST['password']);
     break;
   }
 
