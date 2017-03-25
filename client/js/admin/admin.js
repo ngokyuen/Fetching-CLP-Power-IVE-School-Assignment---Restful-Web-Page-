@@ -9,6 +9,7 @@ class Admin extends React.Component {
     return (
       <div>
         <AdminLogin store={root} />
+        <AdminMain store={root} />
       </div>
     )
   }

@@ -28,11 +28,11 @@ const AdminStoreReducer = (state=[], action) => {
     case 'login_success':
     //alert("test");
       return {
-        ...state, login: action.payload.result, token: action.payload.data.token,
+        ...state, login: action.payload.result, token: action.payload.data.token, login_error_msg: '',
       }
     case 'login_fail':
       return {
-        ...state, login: action.payload.result, token: '',
+        ...state, login: action.payload.result, token: '', login_error_msg: action.payload.error_msg,
       }
     default:
       return {

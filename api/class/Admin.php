@@ -17,7 +17,7 @@ class Admin extends Generate {
       if ($result = $response->fetch_all(MYSQLI_ASSOC)){
         return json_encode(array("result"=>true, "data"=>$result[0]));
       } else {
-        return json_encode(array("result"=>false));
+        return json_encode(array("result"=>false, "error_msg"=>"error login username/password"));
       }
     }
 }
