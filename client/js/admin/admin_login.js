@@ -32,7 +32,7 @@ class AdminLoginComponent extends React.Component {
         <div style={{marginTop:10}}>
           <input type="password" value={this.state.password} onChange={(e)=>this.changePassword(e)} name="password" placeholder="Password" />
         </div>
-        { (this.props.Admin.login == false)? <div>{this.props.Admin.login_error_msg}</div> : null}
+        { (this.props.Admin.login_result == false)? <div>{this.props.Admin.login_error_msg}</div> : null}
         <div style={{marginTop:10, textAlign: "center"}}>
           <input onClick={(e)=>this.clickLoginButton(e)} type="button" value="Submit" />
         </div>

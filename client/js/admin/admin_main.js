@@ -8,9 +8,10 @@ class AdminMainComponent extends React.Component {
   }
 
   render(){
+    const root = RootReducerStore;
     return (
       <div>
-        <AdminStationList store={this.props} />
+        <AdminStationList store={root}/>
       </div>
     );
   }
