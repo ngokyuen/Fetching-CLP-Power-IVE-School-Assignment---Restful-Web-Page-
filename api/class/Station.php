@@ -64,7 +64,16 @@ class Station extends Generate {
       $this->searchMapKeyword = $keyword;
     }
 
-    public function getAll() {
+    public function get(){
+
+      if (isset($this->no) && $this->no != ''){
+        return $this->getStation(" no=" . $this->no);
+      } else {
+        return $this->getAllStations();
+      }
+    }
+
+    public function getAllStations() {
       if ($this->searchMapDetailByPlaceId){
         return $this->getMapDetailByPlaceId();
       }
@@ -78,7 +87,7 @@ class Station extends Generate {
       }
     }
 
-    public function get($conditions) {
+    public function getStation($conditions) {
       $query = "SELECT * FROM station";
       $query .= " WHERE lang='" . $this->lang . "'";
       if ($conditions)

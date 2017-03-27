@@ -1,6 +1,28 @@
 
 const AdminStoreReducer = (state=[], action) => {
   switch (action.type){
+    case 'load_station':
+    try {
+      fetch("http://localhost:81/coursework/api/api.php?no=" + action.no + "&format=json&lang=en").then(function(response){
+        response.json().then(function(json){
+          action.dispatch({type:'load_station_success', payload:json});
+        });
+      });
+    } catch(e) {
+      action.dispatch({type:'load_station_fail'});
+      console.log(e);
+    }
+    return {
+      ...state,
+    }
+    case 'load_station_success':
+      return {
+        ...state, load_station_result: action.payload,
+      }
+    case 'load_station_fail':
+      return {
+        ...state, load_station_error_msg: 'Load Station Error',
+      }
     case 'load_stations':
       try {
         fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en").then(function(response){

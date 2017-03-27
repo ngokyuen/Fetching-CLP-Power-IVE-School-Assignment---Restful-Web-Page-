@@ -8,7 +8,7 @@ require_once './class/Station.php';
 $station = new Station($SQL);
 $admin = new Admin($SQL);
 
-if (isset($_GET['action'])) {
+if (isset($_GET['action']) && $_GET['action'] == 'login') {
   switch($_GET['action']){
     case 'login':
       echo $admin->login($_POST['username'], $_POST['password']);
@@ -19,14 +19,14 @@ if (isset($_GET['action'])) {
 
   if ($error = $station->importURLRequest($_GET)) {
       $station->outputError($error['code'], $error['msg']);
-  } else if (isset($_GET['action'])) {
+  } else if (isset($_GET['action']) && $_GET['action'] == 'addMapDetail') {
       switch($_GET['action']){
         case 'addMapDetail':
           return $station->inputMapDetail($_POST['mapdetails'], $_POST['provider']);
         break;
       }
   } else {
-      $station->output($station->getAll());
+      $station->output($station->get());
   }
 
 }
