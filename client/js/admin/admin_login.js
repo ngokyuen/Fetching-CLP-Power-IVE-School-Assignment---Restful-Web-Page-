@@ -23,22 +23,30 @@ class AdminLoginComponent extends React.Component {
   }
 
   render(){
-    return (
-      <div style={{position:"absolute", marginLeft:-100, marginTop:-100, top:"50%", left:"50%"}}>
-        <div style={{textAlign: "center"}}>Admin Login</div>
-        <div style={{marginTop:10}}>
-          <input type="text" value={this.state.username} onChange={(e)=>this.changeUsername(e)} name="username" placeholder="Email" />
+    const {login_result} = this.props.Admin;
+    if (!login_result) {
+      return (
+        <div className="login_page">
+          <div className="login">
+          <div><img src="./img/admin_logo_96.png" /></div>
+            <div className="title">Admin Login</div>
+            <div className="input">
+              <input type="text" value={this.state.username} onChange={(e)=>this.changeUsername(e)} name="username" placeholder="Email" />
+            </div>
+            <div className="input">
+              <input type="password" value={this.state.password} onChange={(e)=>this.changePassword(e)} name="password" placeholder="Password" />
+            </div>
+            { (this.props.Admin.login_result == false)? <div>{this.props.Admin.login_error_msg}</div> : null}
+            <div className="input">
+              <input onClick={(e)=>this.clickLoginButton(e)} type="button" value="Sign in" />
+            </div>
+          </div>
         </div>
-        <div style={{marginTop:10}}>
-          <input type="password" value={this.state.password} onChange={(e)=>this.changePassword(e)} name="password" placeholder="Password" />
-        </div>
-        { (this.props.Admin.login_result == false)? <div>{this.props.Admin.login_error_msg}</div> : null}
-        <div style={{marginTop:10, textAlign: "center"}}>
-          <input onClick={(e)=>this.clickLoginButton(e)} type="button" value="Submit" />
-        </div>
+      );
+    } else {
+      return null;
+    }
 
-      </div>
-    );
   }
 }
 
