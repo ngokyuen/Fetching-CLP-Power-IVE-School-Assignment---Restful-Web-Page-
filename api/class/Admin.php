@@ -20,5 +20,16 @@ class Admin extends Generate {
         return json_encode(array("result"=>false, "error_msg"=>"error login username/password"));
       }
     }
+
+    public function delete_station($id){
+      $query = "UPDATE user SET deleted = 1 WHERE _id=" + $id;
+      $response = $this->sql->query($query);
+      Header('Content-type: text/json');
+      if ($response){
+        return json_encode(array("result"=>true));
+      } else {
+        return json_encode(array("result"=>false));
+      }
+    }
 }
 ?>
