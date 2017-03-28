@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.6.5.2
+-- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 28, 2017 at 01:31 PM
--- Server version: 10.1.19-MariaDB
--- PHP Version: 5.6.28
+-- 主機: localhost
+-- 產生時間： 2017 年 03 月 28 日 18:43
+-- 伺服器版本: 10.1.21-MariaDB
+-- PHP 版本： 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `coursework`
+-- 資料庫： `coursework`
 --
 CREATE DATABASE IF NOT EXISTS `coursework` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `coursework`;
@@ -25,7 +25,7 @@ USE `coursework`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `station`
+-- 資料表結構 `station`
 --
 
 DROP TABLE IF EXISTS `station`;
@@ -43,6 +43,7 @@ CREATE TABLE `station` (
   `parkingNo` varchar(255) NOT NULL,
   `img` text NOT NULL,
   `lang` varchar(255) NOT NULL,
+  `is_approved` tinyint(4) NOT NULL DEFAULT '0',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -50,7 +51,7 @@ CREATE TABLE `station` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- 資料表結構 `user`
 --
 
 DROP TABLE IF EXISTS `user`;
@@ -66,7 +67,7 @@ CREATE TABLE `user` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_station`
+-- 資料表結構 `user_station`
 --
 
 DROP TABLE IF EXISTS `user_station`;
@@ -84,43 +85,43 @@ CREATE TABLE `user_station` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Indexes for dumped tables
+-- 已匯出資料表的索引
 --
 
 --
--- Indexes for table `station`
+-- 資料表索引 `station`
 --
 ALTER TABLE `station`
   ADD PRIMARY KEY (`_id`);
 
 --
--- Indexes for table `user`
+-- 資料表索引 `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`_id`);
 
 --
--- Indexes for table `user_station`
+-- 資料表索引 `user_station`
 --
 ALTER TABLE `user_station`
   ADD PRIMARY KEY (`_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- 在匯出的資料表使用 AUTO_INCREMENT
 --
 
 --
--- AUTO_INCREMENT for table `station`
+-- 使用資料表 AUTO_INCREMENT `station`
 --
 ALTER TABLE `station`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `user`
+-- 使用資料表 AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `user_station`
+-- 使用資料表 AUTO_INCREMENT `user_station`
 --
 ALTER TABLE `user_station`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;

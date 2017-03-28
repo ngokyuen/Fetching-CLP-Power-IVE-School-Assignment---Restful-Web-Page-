@@ -81,7 +81,7 @@ class Station extends Generate {
         return $this->searchMapKeyword();
       } else {
         $query = "SELECT * FROM station";
-        $query .= " WHERE lang='" . $this->lang . "'";
+        $query .= " WHERE lang='" . $this->lang . "' AND deleted=0";
         $result = $this->sql->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
       }
@@ -89,7 +89,7 @@ class Station extends Generate {
 
     public function getStation($conditions) {
       $query = "SELECT * FROM station";
-      $query .= " WHERE lang='" . $this->lang . "'";
+      $query .= " WHERE lang='" . $this->lang . "' AND deleted=0";
       if ($conditions)
           $query .= " AND " . $conditions;
       $result = $this->sql->query($query);

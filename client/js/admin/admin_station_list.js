@@ -11,6 +11,14 @@ class AdminStationListComponent extends React.Component {
     }
   }
 
+  componentWillUpdate(nextProps, nextState){
+    switch (nextProps.Admin.type){
+      case 'delete_station_success':
+        this.reload();
+        break;
+    }
+  }
+
   componentDidMount(){
     this.reload();
   }

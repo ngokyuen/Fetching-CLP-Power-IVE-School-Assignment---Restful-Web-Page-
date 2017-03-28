@@ -1,6 +1,38 @@
 
 const AdminStoreReducer = (state=[], action) => {
   switch (action.type){
+    case 'update_station':
+      try {
+        const url_string = "id=" + encodeURIComponent(action.id) + "&editStation=" + encodeURIComponent(action.editStation);
+        fetch ("http://localhost:81/coursework/api/api.php?action=update_station",
+        {
+          method: "POST",
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: url_string,
+        }).then(function(response){
+          response.json().then(function(json){
+            //console.log(json);
+            if (json.result == true){
+              action.dispatch({type:'update_station_success', payload: json});
+            } else {
+              action.dispatch({type:'update_station_fail', payload: json});
+            }
+          });
+        });
+      } catch(e){
+        console.log(e);
+      }
+        return {
+          ...state, type: 'update_station',
+        }
+    case 'update_station_success':
+      return {
+        ...state, type: 'update_station_success',
+      }
+    case 'update_station_fail':
+      return {
+        ...state, type: 'update_station_fail',
+      }
     case 'delete_station':
       try {
         fetch("http://localhost:81/coursework/api/api.php?action=delete_station&id="+action.id).then(function(response){
@@ -18,11 +50,11 @@ const AdminStoreReducer = (state=[], action) => {
       break;
     case 'delete_station_success':
       return {
-        ...state, type: delete_station_success
+        ...state, type: 'delete_station_success',
       }
     case 'delete_station_fail':
       return {
-        ...state, type: delete_station_fail
+        ...state, type: 'delete_station_fail',
       }
     case 'load_station':
       try {
@@ -40,15 +72,15 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'clear_load_station':
       return {
-        ...state, load_station_result: null,
+        ...state, load_station_result: null, type: 'clear_load_station',
       }
     case 'load_station_success':
       return {
-        ...state, load_station_result: action.payload,
+        ...state, load_station_result: action.payload, type: 'load_station_success',
       }
     case 'load_station_fail':
       return {
-        ...state, load_station_error_msg: 'Load Station Error',
+        ...state, load_station_error_msg: 'Load Station Error', type:'load_station_fail',
       }
     case 'load_stations':
       try {
@@ -62,18 +94,16 @@ const AdminStoreReducer = (state=[], action) => {
         console.log(e);
       }
       return {
-        ...state,
+        ...state, type:'load_stations',
       }
-
     case 'load_stations_success':
       return {
-        ...state, load_stations_result: action.payload,
+        ...state, load_stations_result: action.payload, type: 'load_stations_success',
       }
     case 'load_stations_fail':
       return {
-        ...state, load_stations_error_msg: 'Load Stations Error',
+        ...state, load_stations_error_msg: 'Load Stations Error', type: 'load_stations_fail',
       }
-
     case 'login':
       try {
         const url_string = "username=" + encodeURIComponent(action.payload.username) + "&password=" + encodeURIComponent(action.payload.password);
@@ -93,19 +123,18 @@ const AdminStoreReducer = (state=[], action) => {
           });
         });
         return {
-          ...state,
+          ...state, type: 'login',
         }
       } catch (e){
         console.log(e)
       }
     case 'login_success':
-    //alert("test");
       return {
-        ...state, login_result: action.payload.result, token: action.payload.data.token, login_error_msg: '',
+        ...state, type:'login_success', login_result: action.payload.result, token: action.payload.data.token, login_error_msg: '',
       }
     case 'login_fail':
       return {
-        ...state, login_result: action.payload.result, token: '', login_error_msg: action.payload.error_msg,
+        ...state, type:'login_fail', login_result: action.payload.result, token: '', login_error_msg: action.payload.error_msg,
       }
     default:
       return {
