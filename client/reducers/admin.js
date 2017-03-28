@@ -1,20 +1,47 @@
 
 const AdminStoreReducer = (state=[], action) => {
   switch (action.type){
-    case 'load_station':
-    try {
-      fetch("http://localhost:81/coursework/api/api.php?no=" + action.no + "&format=json&lang=en").then(function(response){
-        response.json().then(function(json){
-          action.dispatch({type:'load_station_success', payload:json});
+    case 'delete_station':
+      try {
+        fetch("http://localhost:81/coursework/api/api.php?action=delete_station&id="+action.id).then(function(response){
+          response.json().then(function(json){
+            action.dispatch({type:'delete_station_success'});
+          });
         });
-      });
-    } catch(e) {
-      action.dispatch({type:'load_station_fail'});
-      console.log(e);
-    }
-    return {
-      ...state,
-    }
+      } catch (e){
+        action.dispatch({type:'delete_station_fail'});
+        console.log(e);
+      }
+      return {
+        ...state,
+      }
+      break;
+    case 'delete_station_success':
+      return {
+        ...state, type: delete_station_success
+      }
+    case 'delete_station_fail':
+      return {
+        ...state, type: delete_station_fail
+      }
+    case 'load_station':
+      try {
+        fetch("http://localhost:81/coursework/api/api.php?no=" + action.no + "&format=json&lang=en").then(function(response){
+          response.json().then(function(json){
+            action.dispatch({type:'load_station_success', payload:json});
+          });
+        });
+      } catch(e) {
+        action.dispatch({type:'load_station_fail'});
+        console.log(e);
+      }
+      return {
+        ...state,
+      }
+    case 'clear_load_station':
+      return {
+        ...state, load_station_result: null,
+      }
     case 'load_station_success':
       return {
         ...state, load_station_result: action.payload,

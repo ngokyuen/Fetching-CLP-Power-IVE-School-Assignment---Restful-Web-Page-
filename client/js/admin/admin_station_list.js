@@ -126,11 +126,11 @@ class AdminStationListComponent extends React.Component {
           return (
             <div>
               {this.renderHeader()}
-              <div className="table">
+              <div className="stationListTable">
               {this.renderStationsHeader()}
               </div>
-              <div className="stationList">
-                <div className="table">
+              <div id="stationList" className="stationList">
+                <div className="stationListTable">
                   {filterStations.map((station, index) => {
                     const cell_style = (index%2==0)?"cell cell1":"cell cell2";
                     return (
@@ -158,12 +158,11 @@ class AdminStationListComponent extends React.Component {
     } catch (e){
       console.log(e);
     }
-
   }
 
   render(){
     return (
-      <div className="stationListContainer">
+      <div id="stationListContainer" className="stationListContainer">
         <div className="title">Modify/Delete Station List</div>
         {this.renderStations()}
       </div>

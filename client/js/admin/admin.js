@@ -1,4 +1,4 @@
-class Admin extends React.Component {
+class AdminComponent extends React.Component {
 
   constructor(props){
     super(props);
@@ -6,18 +6,29 @@ class Admin extends React.Component {
 
   render(){
     const root = RootReducerStore;
-    return (
-      <div>
-        <AdminLogin store={root} />
-        <AdminMain store={root} />
-        <AdminEditStation store={root} />
-      </div>
-    )
+    const {login_result} = this.props.Admin;
+    if (login_result){
+      return (
+        <div>
+          <AdminLogin store={root} />
+          <AdminMain store={root} />
+          <AdminEditStation store={root} />
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <AdminLogin store={root} />
+        </div>
+      )
+    }
+
   }
 }
 
-//const Admin = connect(state=>state, null)(AdminComponent);
+const root = RootReducerStore;
+const Admin = connect(state=>state, null)(AdminComponent);
 ReactDOM.render(
-  <Admin />
+  <Admin store={root} />
   ,document.getElementById('content')
 );

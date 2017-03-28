@@ -26,7 +26,7 @@ class AdminLoginComponent extends React.Component {
     const {login_result} = this.props.Admin;
     if (!login_result) {
       return (
-        <div className="login_page">
+        <div>
           <div className="login">
           <div><img src="./img/admin_logo_96.png" /></div>
             <div className="title">Admin Login</div>

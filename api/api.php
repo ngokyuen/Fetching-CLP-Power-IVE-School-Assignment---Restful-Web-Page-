@@ -13,6 +13,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'login') {
     case 'login':
       echo $admin->login($_POST['username'], $_POST['password']);
     break;
+    case 'delete_station':
+      echo $admin->delete_station($_GET['id']);
+    break;
   }
 
 } else {
