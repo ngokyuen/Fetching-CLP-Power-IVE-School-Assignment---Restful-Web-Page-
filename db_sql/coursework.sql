@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
--- 主機: localhost
--- 產生時間： 2017 年 03 月 25 日 11:32
--- 伺服器版本: 10.1.21-MariaDB
--- PHP 版本： 5.6.30
+-- Host: 127.0.0.1
+-- Generation Time: Mar 28, 2017 at 01:31 PM
+-- Server version: 10.1.19-MariaDB
+-- PHP Version: 5.6.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫： `coursework`
+-- Database: `coursework`
 --
 CREATE DATABASE IF NOT EXISTS `coursework` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `coursework`;
@@ -25,7 +25,7 @@ USE `coursework`;
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `station`
+-- Table structure for table `station`
 --
 
 DROP TABLE IF EXISTS `station`;
@@ -43,13 +43,14 @@ CREATE TABLE `station` (
   `parkingNo` varchar(255) NOT NULL,
   `img` text NOT NULL,
   `lang` varchar(255) NOT NULL,
+  `deleted` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `user`
+-- Table structure for table `user`
 --
 
 DROP TABLE IF EXISTS `user`;
@@ -57,7 +58,7 @@ CREATE TABLE `user` (
   `_id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL COMMENT 'admin, user',
+  `type` varchar(255) NOT NULL DEFAULT 'user' COMMENT 'admin, user',
   `token` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -65,7 +66,7 @@ CREATE TABLE `user` (
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `user_station`
+-- Table structure for table `user_station`
 --
 
 DROP TABLE IF EXISTS `user_station`;
@@ -77,50 +78,49 @@ CREATE TABLE `user_station` (
   `lat` double NOT NULL,
   `lng` double NOT NULL,
   `formatted_address` varchar(255) NOT NULL,
-  `place_id` varchar(255) NOT NULL,
   `provider` varchar(255) NOT NULL,
-  `is_approved` tinyint(4) NOT NULL DEFAULT '0',
+  `is_approved` tinyint(4) DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- 已匯出資料表的索引
+-- Indexes for dumped tables
 --
 
 --
--- 資料表索引 `station`
+-- Indexes for table `station`
 --
 ALTER TABLE `station`
   ADD PRIMARY KEY (`_id`);
 
 --
--- 資料表索引 `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`_id`);
 
 --
--- 資料表索引 `user_station`
+-- Indexes for table `user_station`
 --
 ALTER TABLE `user_station`
   ADD PRIMARY KEY (`_id`);
 
 --
--- 在匯出的資料表使用 AUTO_INCREMENT
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- 使用資料表 AUTO_INCREMENT `station`
+-- AUTO_INCREMENT for table `station`
 --
 ALTER TABLE `station`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- 使用資料表 AUTO_INCREMENT `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- 使用資料表 AUTO_INCREMENT `user_station`
+-- AUTO_INCREMENT for table `user_station`
 --
 ALTER TABLE `user_station`
   MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT;
