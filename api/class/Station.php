@@ -69,11 +69,14 @@ class Station extends Generate {
       if (isset($this->no) && $this->no != ''){
         return $this->getStation(" no=" . $this->no);
       } else {
-        return $this->getAllStations();
+        if ($_SERVER['HTTP_REFERER'] == 'http://localhost:81/coursework/client/admin.html')
+          return $this->getAllStations_Admin();
+        else
+          return $this->getAllStations_Client();
       }
     }
 
-    public function getAllStations() {
+    public function getAllStations($cond=null) {
       if ($this->searchMapDetailByPlaceId){
         return $this->getMapDetailByPlaceId();
       }
@@ -81,10 +84,21 @@ class Station extends Generate {
         return $this->searchMapKeyword();
       } else {
         $query = "SELECT * FROM station";
-        $query .= " WHERE lang='" . $this->lang . "' AND deleted=0";
+        $query .= " WHERE lang='" . $this->lang . "' AND deleted=0 ";
+        if ($cond){
+          $query .= $cond;
+        }
         $result = $this->sql->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
       }
+    }
+
+    public function getAllStations_Client() {
+      return $this->getAllStations(" AND is_approved = 1");
+    }
+
+    public function getAllStations_Admin() {
+      return $this->getAllStations();
     }
 
     public function getStation($conditions) {

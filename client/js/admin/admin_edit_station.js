@@ -18,12 +18,48 @@ class AdminEditStationComponent extends React.Component {
 
   componentWillUpdate(nextProps, nextState){
     switch (nextProps.Admin.type){
-      case 'load_stations':
+      case 'load_stations_success':
       case 'delete_station_success':
         this.clearLoadStation();
         break;
+      case 'load_station_success':
+        this.importStation(nextProps);
+        nextProps.dispatch({type:'load_station_completed'});
+        break;
+      case 'update_station_success':
+        nextProps.dispatch({type:'update_station_completed'});
+        break;
     }
   }
+
+
+    importStation(nextProps){
+      try {
+        const {load_station_result} = nextProps.Admin;
+        if (load_station_result != null){
+          const {stationList} = load_station_result;
+          if (stationList != null){
+            const {station} = stationList;
+              this.setState({address: station.address});
+              this.setState({districtL: station.districtL});
+              this.setState({districtS: station.districtS});
+              this.setState({img: station.img});
+              this.setState({is_approved: station.is_approved});
+              this.setState({lang: station.lang});
+              this.setState({lat: station.lat});
+              this.setState({lng: station.lng});
+              this.setState({location: station.location});
+              this.setState({no: station.no});
+              this.setState({parkingNo: station.parkingNo});
+              this.setState({provider: station.provider});
+              this.setState({type: station.type});
+
+            }
+          }
+        } catch (e) {
+        console.log(e);
+      }
+    }
 
   clickEditButton(id){
     const editStation = "address='" + this.state.address + "', districtL='" + this.state.districtL +
@@ -62,55 +98,55 @@ class AdminEditStationComponent extends React.Component {
                   <div className="table">
                     <div className="row">
                       <div className="cell">Address</div>
-                      <div className="cell"><input onChange={this.changeAddress.bind(this)} value={this.state.address || station.address} /></div>
+                      <div className="cell"><input onChange={this.changeAddress.bind(this)} value={this.state.address} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">DistrictL</div>
-                      <div className="cell"><input onChange={this.changeDistrictL.bind(this)} value={this.state.districtL || station.districtL} /></div>
+                      <div className="cell"><input onChange={this.changeDistrictL.bind(this)} value={this.state.districtL} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">DistrictS</div>
-                      <div className="cell"><input onChange={this.changeDistrictS.bind(this)} value={this.state.districtS || station.districtS} /></div>
+                      <div className="cell"><input onChange={this.changeDistrictS.bind(this)} value={this.state.districtS} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Img</div>
-                      <div className="cell"><input onChange={this.changeImg.bind(this)} value={this.state.img || station.img} /></div>
+                      <div className="cell"><input onChange={this.changeImg.bind(this)} value={this.state.img} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Approved</div>
-                      <div className="cell"><input onChange={this.changeApproved.bind(this)} value={this.state.is_approved || station.is_approved} /></div>
+                      <div className="cell"><input onChange={this.changeApproved.bind(this)} value={this.state.is_approved} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Language</div>
-                      <div className="cell"><input onChange={this.changeLang.bind(this)} value={this.state.lang || station.lang} /></div>
+                      <div className="cell"><input onChange={this.changeLang.bind(this)} value={this.state.lang} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Latitude</div>
-                      <div className="cell"><input onChange={this.changeLat.bind(this)} value={this.state.lat || station.lat} /></div>
+                      <div className="cell"><input onChange={this.changeLat.bind(this)} value={this.state.lat} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Longitude</div>
-                      <div className="cell"><input onChange={this.changeLng.bind(this)} value={this.state.lng || station.lng} /></div>
+                      <div className="cell"><input onChange={this.changeLng.bind(this)} value={this.state.lng} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Location</div>
-                      <div className="cell"><input onChange={this.changeLocation.bind(this)} value={this.state.location || station.location} /></div>
+                      <div className="cell"><input onChange={this.changeLocation.bind(this)} value={this.state.location} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">No</div>
-                      <div className="cell"><input onChange={this.changeNo.bind(this)} value={this.state.no || station.no} /></div>
+                      <div className="cell"><input onChange={this.changeNo.bind(this)} value={this.state.no} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Parking No</div>
-                      <div className="cell"><input onChange={this.changeParkingNo.bind(this)} value={this.state.parkingNo || station.parkingNo} /></div>
+                      <div className="cell"><input onChange={this.changeParkingNo.bind(this)} value={this.state.parkingNo} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Provider</div>
-                      <div className="cell"><input onChange={this.changeProvider.bind(this)} value={this.state.provider || station.provider} /></div>
+                      <div className="cell"><input onChange={this.changeProvider.bind(this)} value={this.state.provider} /></div>
                     </div>
                     <div className="row">
                       <div className="cell">Type</div>
-                      <div className="cell"><input onChange={this.changeType.bind(this)} value={this.state.type || station.type} /></div>
+                      <div className="cell"><input onChange={this.changeType.bind(this)} value={this.state.type} /></div>
                     </div>
                     <div className="row">
                       <div className="cell"><button onClick={this.clickEditButton.bind(this, station._id)}  className="bottom_button">Submit</button></div>

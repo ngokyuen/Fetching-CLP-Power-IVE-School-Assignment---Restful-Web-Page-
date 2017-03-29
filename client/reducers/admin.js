@@ -12,19 +12,18 @@ const AdminStoreReducer = (state=[], action) => {
         }).then(function(response){
           response.json().then(function(json){
             //console.log(json);
-            if (json.result == true){
+            if (json.result == true)
               action.dispatch({type:'update_station_success', payload: json});
-            } else {
+            else
               action.dispatch({type:'update_station_fail', payload: json});
-            }
           });
         });
       } catch(e){
         console.log(e);
       }
-        return {
-          ...state, type: 'update_station',
-        }
+      return {
+        ...state, type: 'update_station',
+      }
     case 'update_station_success':
       return {
         ...state, type: 'update_station_success',
@@ -37,15 +36,17 @@ const AdminStoreReducer = (state=[], action) => {
       try {
         fetch("http://localhost:81/coursework/api/api.php?action=delete_station&id="+action.id).then(function(response){
           response.json().then(function(json){
-            action.dispatch({type:'delete_station_success'});
+            if (json.result == true)
+              action.dispatch({type:'delete_station_success'});
+            else
+              action.dispatch({type:'delete_station_fail'});
           });
         });
       } catch (e){
-        action.dispatch({type:'delete_station_fail'});
         console.log(e);
       }
       return {
-        ...state,
+        ...state, type: 'delete_station',
       }
       break;
     case 'delete_station_success':
@@ -60,19 +61,19 @@ const AdminStoreReducer = (state=[], action) => {
       try {
         fetch("http://localhost:81/coursework/api/api.php?no=" + action.no + "&format=json&lang=en").then(function(response){
           response.json().then(function(json){
-            action.dispatch({type:'load_station_success', payload:json});
+            if (json){
+              action.dispatch({type:'load_station_success', payload:json});
+            } else {
+              action.dispatch({type:'load_station_fail'});
+            }
+
           });
         });
       } catch(e) {
-        action.dispatch({type:'load_station_fail'});
         console.log(e);
       }
       return {
-        ...state,
-      }
-    case 'clear_load_station':
-      return {
-        ...state, load_station_result: null, type: 'clear_load_station',
+        ...state, type: 'load_station',
       }
     case 'load_station_success':
       return {
@@ -80,17 +81,23 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'load_station_fail':
       return {
-        ...state, load_station_error_msg: 'Load Station Error', type:'load_station_fail',
+        ...state, type: 'load_station_fail',
+      }
+    case 'clear_load_station':
+      return {
+        ...state, load_station_result: null, type: 'clear_load_station_success',
       }
     case 'load_stations':
       try {
         fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en").then(function(response){
           response.json().then(function(json){
-            action.dispatch({type:'load_stations_success', payload:json});
+            if (json)
+              action.dispatch({type:'load_stations_success', payload:json});
+            else
+              action.dispatch({type:'load_stations_fail'});
           });
         });
       } catch(e) {
-        action.dispatch({type:'load_stations_fail'});
         console.log(e);
       }
       return {
@@ -102,7 +109,7 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'load_stations_fail':
       return {
-        ...state, load_stations_error_msg: 'Load Stations Error', type: 'load_stations_fail',
+        ...state, type: 'load_stations_fail',
       }
     case 'login':
       try {
@@ -115,11 +122,10 @@ const AdminStoreReducer = (state=[], action) => {
         }).then(function(response){
           response.json().then(function(json){
             //console.log(json);
-            if (json.result == true){
+            if (json.result == true)
               action.dispatch({type:'login_success', payload: json});
-            } else {
+            else
               action.dispatch({type:'login_fail', payload: json});
-            }
           });
         });
         return {
@@ -130,7 +136,7 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'login_success':
       return {
-        ...state, type:'login_success', login_result: action.payload.result, token: action.payload.data.token, login_error_msg: '',
+        ...state, type:'login_completed', login_result: action.payload.result, token: action.payload.data.token, login_error_msg: '',
       }
     case 'login_fail':
       return {
@@ -138,7 +144,7 @@ const AdminStoreReducer = (state=[], action) => {
       }
     default:
       return {
-        ...state
+        ...state, type: action.type,
       }
   }
 }
