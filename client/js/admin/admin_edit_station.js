@@ -32,34 +32,32 @@ class AdminEditStationComponent extends React.Component {
     }
   }
 
-
-    importStation(nextProps){
-      try {
-        const {load_station_result} = nextProps.Admin;
-        if (load_station_result != null){
-          const {stationList} = load_station_result;
-          if (stationList != null){
-            const {station} = stationList;
-              this.setState({address: station.address});
-              this.setState({districtL: station.districtL});
-              this.setState({districtS: station.districtS});
-              this.setState({img: station.img});
-              this.setState({is_approved: station.is_approved});
-              this.setState({lang: station.lang});
-              this.setState({lat: station.lat});
-              this.setState({lng: station.lng});
-              this.setState({location: station.location});
-              this.setState({no: station.no});
-              this.setState({parkingNo: station.parkingNo});
-              this.setState({provider: station.provider});
-              this.setState({type: station.type});
-
-            }
+  importStation(nextProps){
+    try {
+      const {load_station_result} = nextProps.Admin;
+      if (load_station_result != null){
+        const {stationList} = load_station_result;
+        if (stationList != null){
+          const {station} = stationList;
+            this.setState({address: station.address});
+            this.setState({districtL: station.districtL});
+            this.setState({districtS: station.districtS});
+            this.setState({img: station.img});
+            this.setState({is_approved: station.is_approved});
+            this.setState({lang: station.lang});
+            this.setState({lat: station.lat});
+            this.setState({lng: station.lng});
+            this.setState({location: station.location});
+            this.setState({no: station.no});
+            this.setState({parkingNo: station.parkingNo});
+            this.setState({provider: station.provider});
+            this.setState({type: station.type});
           }
-        } catch (e) {
-        console.log(e);
-      }
+        }
+      } catch (e) {
+      console.log(e);
     }
+  }
 
   clickEditButton(id){
     const editStation = "address='" + this.state.address + "', districtL='" + this.state.districtL +

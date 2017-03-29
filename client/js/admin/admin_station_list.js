@@ -92,21 +92,18 @@ class AdminStationListComponent extends React.Component {
 
   renderHeader(){
     return (
-      <ul>
-        <li><img onClick={this.clickReload.bind(this)} alt="reload" src="./img/reload_64.png" /></li>
-        <li>No</li>
-        <li><input onChange={this.changeNo.bind(this)} className="searchInput" type="text" /></li>
-        <li>Location</li>
-        <li><input onChange={this.changeLocation.bind(this)} className="searchInput" type="text"  /></li>
-        <li>Type</li>
-        <li><input onChange={this.changeType.bind(this)} className="searchInput" type="text"  /></li>
-        <li>District</li>
-        <li><input onChange={this.changeDistrict.bind(this)} className="searchInput" type="text"  /></li>
-        <li>Address</li>
-        <li><input onChange={this.changeAddress.bind(this)} className="searchInput" type="text"  /></li>
-        <li>Provider</li>
-        <li><input onChange={this.changeProvider.bind(this)} className="searchInput" type="text" /></li>
-      </ul>
+      <div className="filterContainer">
+          <div className="title">Filter</div>
+          <div className="filters">
+            <span><img onClick={this.clickReload.bind(this)} alt="reload" src="./img/reload_64.png" /></span>
+            <span><span>No</span><input onChange={this.changeNo.bind(this)} className="searchInput" type="text" /></span>
+            <span><span>Location</span><input onChange={this.changeLocation.bind(this)} className="searchInput" type="text"  /></span>
+            <span><span>Type</span><input onChange={this.changeType.bind(this)} className="searchInput" type="text"  /></span>
+            <span><span>District</span><input onChange={this.changeDistrict.bind(this)} className="searchInput" type="text"  /></span>
+            <span><span>Address</span><input onChange={this.changeAddress.bind(this)} className="searchInput" type="text"  /></span>
+            <span><span>Provider</span><input onChange={this.changeProvider.bind(this)} className="searchInput" type="text" /></span>
+          </div>
+      </div>
     )
   }
 

@@ -1,5 +1,6 @@
 
-html, body { width:100%; height: 100%; background-color: #d9d9d9; border: 0; padding:0; margin:0;}
+html, body { width:100%; height: 100%; background-color: #d9d9d9; border: 0; padding:0; margin:0;
+  white-space: nowrap;}
 input, button { border: 0; padding: 0; margin: 0;}
 
 /*
@@ -9,6 +10,26 @@ input, button { border: 0; padding: 0; margin: 0;}
   background-color: #d9d9d9;
 }
 */
+
+/* real width */
+.filterContainer {
+  width:1684px;
+  background-color: #e6e6e6;
+  padding: 5px;
+  border: 1px solid #b3b3b3;
+}
+
+.filterContainer .title{
+}
+
+.filterContainer .filters{
+}
+
+.filterContainer span{
+  padding: 5px 5px;
+}
+
+
 
 .alertContainer {
   position: absolute;
