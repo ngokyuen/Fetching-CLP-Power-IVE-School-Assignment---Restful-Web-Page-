@@ -1,0 +1,9 @@
+
+  body {font-size: 20px;}
+  input {font-size: 20px;}
+  button {font-size: 20px;}
+  #container {width: 100%; }
+  #menu {width:900px; margin: auto; text-align: center;}
+  #content {width:900px; margin: auto;}
+  #map { height: 600px; width: 600px; }
+  #mapList { height: 600px; width: 300px; overflow: auto;}
