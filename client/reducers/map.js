@@ -2,6 +2,10 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'filterMap':
+      return {
+        ...state, filterAddress: action.address, filterProvider: action.provider,
+      }
     case 'clearMapListItems':
       state.addMapListItems = [];
       return {

@@ -65,8 +65,8 @@ class SearchMapKeywordComponent extends React.Component {
 
   renderSearchMapResult(){
     if (this.state.searchMapKeywordResult != null && this.state.searchMapKeywordResult.stationList.station.status == "OK"){
-      return <div style={{position:'absolute',width:900, zIndex:9999}}>{this.state.searchMapKeywordResult.stationList.station.predictions.map(search=>
-        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)} style={{ padding:20, borderStyle:'solid',borderWidth:1,backgroundColor:'white', width:860}} key={search.id}>
+      return <div >{this.state.searchMapKeywordResult.stationList.station.predictions.map(search=>
+        <div onClick={(e)=>this.clickSearchMapKeywordResultItem(search.place_id)}  key={search.id}>
           <div>{search.description}</div>
         </div>
       )}</div>
@@ -75,10 +75,10 @@ class SearchMapKeywordComponent extends React.Component {
 
   render(){
     return (
-      <div style={{}} id="searchmap" ref="searchmap">
+      <div id="searchmap" ref="searchmap">
         <div onFocus={()=>this.changeSearchMapKeywordResult(true)} onMouseEnter={()=>this.changeSearchMapKeywordResult(true)} onMouseLeave={()=>this.changeSearchMapKeywordResult(false)} >
           <div>Search</div>
-          <div><input onChange={this.changeSearchMapKeyword.bind(this)} autoComplete="off" style={{width:"100%"}} type="text" name="searchmap_keyword" placeholder="Enter any place keywords" /></div>
+          <div><input onChange={this.changeSearchMapKeyword.bind(this)} autoComplete="off" type="text" name="searchmap_keyword" placeholder="Enter any place keywords" /></div>
           {(this.state.showSearchMapKeywordResult)?this.renderSearchMapResult():null}
         </div>
       </div>

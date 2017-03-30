@@ -1,26 +1,36 @@
+.menuContainer {
+  min-width: 880px;
+  width: 100%;
+  background-color: #3367d6;
+  box-shadow: 0px 1px 2px 0px;
+  height: 100%;
+}
 
+.logoContainer {
+  width: 100%;
+}
 
-#menu {
-  width:100%;
-  margin: auto;
-  display: flex;
+.logoContainer .logo {
+  font-size: 30px;
+  color: #ffffff;
+  padding: 10px 0 0 15px;
+}
+
+.menuButtonContainer {
+  width: 100%;
   flex-direction: column;
+  display: flex;
   flex: 1;
 }
 
-.menuContainer {
-  background-color: #3367d6;
-  padding: 10px;
-  box-shadow: 0px 1px 2px 0px;
-}
-
-.menuContainer ul {
+.menuButton {
   text-align: right;
 }
 
-.menuContainer ul li {
+.menuButton li {
   display: inline;
   padding-right: 7px;
+  white-space: nowrap;
 }
 
 .facebook-like {
@@ -28,11 +38,13 @@
   right: 0px;
   top: 150px;
   padding-right: 5px;
+  z-index: 9000;
 }
 
 
 .menuContainer ul li a{
   border-radius: 2px;
+  margin: 8px 0px;
   padding: 8px 16px;
   background-color: #ffffff;
   text-decoration: none;
@@ -45,6 +57,7 @@
 }
 .menuContainer ul li a:hover{
   color: #ff8080;
+  opacity: 0.9;
 }
 .menuContainer ul li a:active{
 }

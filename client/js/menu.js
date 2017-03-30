@@ -1,4 +1,6 @@
-class Menu extends React.Component {
+const {connect} = ReactRedux;
+
+class MenuContainer extends React.Component {
   constructor(props){
     super(props);
   }
@@ -10,14 +12,25 @@ class Menu extends React.Component {
 
   }
 
+  clickContact(){
+    this.props.dispatch({type:'go_to_contact_page'});
+  }
+
   render(){
     return (
       <div className="menuContainer">
-        <ul>
-          <li ><a href="">Main</a></li>
-          <li ><a href="javascript:;">Contact us</a></li>
-          <li ><a href="./admin.html">Admin</a></li>
-        </ul>
+        <div className="logoContainer">
+          <div className="logo">CLP Power HK</div>
+        </div>
+
+        <div className="menuButtonContainer">
+          <ul className="menuButton">
+            <li ><a href="">Main</a></li>
+            <li ><a href="javascript:;" onClick={this.clickContact.bind(this)}>Contact us</a></li>
+            <li ><a href="./admin.html">Admin</a></li>
+          </ul>
+        </div>
+
         <div className="facebook-like">
           <div className="fb-like " data-href="https://developers.facebook.com/docs/plugins/" data-layout="box_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
         </div>
@@ -27,7 +40,4 @@ class Menu extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Menu />
-  ,document.getElementById('menu')
-);
+const Menu = connect(state=>state, null)(MenuContainer);
