@@ -5,25 +5,37 @@ class MapFilterComponent extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      address: '',
-      provider: '',
+      filterAddress: '',
+      filterProvider: '',
     }
   }
 
-  changeAddress(e){
-    this.setState({address: e.target.value});
-    this.startFilter();
+  componentWillUpdate(nextProps, nextState){
+
+    if (nextState.filterAddress != this.state.filterAddress || nextState.filterProvider != this.state.filterProvider){
+      // const stations = nextProps.Map.result.stationList.station;
+      // nextState.markers = stations.filter((item, index, array)=>{
+      //   if (item.address.toUpperCase().indexOf(nextState.filterAddress.toUpperCase()) > -1)
+      //     return true;
+      // });
+      nextProps.dispatch({type:'filterMapItems',filterAddress:nextState.filterAddress, filterProvider:nextState.filterProvider, dispatch: nextProps.dispatch});
+    }
   }
 
-  changeProvider(e){
-    this.setState({provider: e.target.value});
-    this.startFilter();
-  }
+  // shouldComponentUpdate(nextProps, nextState){
+  //   if (nextState.filterAddress != this.state.filterAddress || nextState.filterProvider != this.state.filterProvider){
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
-  startFilter(){
-    if (this.state.address != '' || this.state.provider != '')
-      this.props.dispatch({type:'filterMap', address:this.state.address, provider:this.state.provider});
-  }
+    changeFilterAddress(e){
+      this.setState({filterAddress: e.target.value});
+    }
+
+    changeFilterProvider(e){
+      this.setState({filterProvider: e.target.value});
+    }
 
   render(){
     return (
@@ -31,11 +43,10 @@ class MapFilterComponent extends React.Component {
         <div className="header">Filter</div>
         <div className="mapFilter">
           <span className="field">Address</span>
-          <input onChange={this.changeAddress.bind(this)} placeholder="Enter Address" value={this.state.address} />
+          <input onChange={this.changeFilterAddress.bind(this)} placeholder="Enter Address" value={this.state.filterAddress} />
           <span className="field">Provider</span>
-          <input onChange={this.changeProvider.bind(this)} placeholder="Enter Provider" value={this.state.provider} />
+          <input onChange={this.changeFilterProvider.bind(this)} placeholder="Enter Provider" value={this.state.filterProvider} />
         </div>
-
       </div>
     );
   }

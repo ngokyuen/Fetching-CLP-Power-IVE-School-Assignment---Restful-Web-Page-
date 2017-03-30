@@ -6,7 +6,8 @@ class MapComponent extends React.Component {
     super(props);
     this.state = {
       map: null,
-      markers: null,
+      stations: [],
+      markers: [],
     }
   }
 
@@ -16,16 +17,34 @@ class MapComponent extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    if (nextState.markers != null && this.state.markers != nextState.markers){
+    if (nextState.stations != null && this.state.stations != nextState.stations){
+      return true;
+    // if (nextState.markers != null && this.state.markers != nextState.markers){
+    //   return true;
+    } else if (nextProps.Map.type=='getMapItemsSuccess'){
+      return true;
+    } else if (nextProps.Map.type=='filterMapItems'){
       return true;
     }
     return false;
   }
 
   componentWillUpdate(nextProps, nextState){
-    if (nextState.markers != null && this.state.markers != nextState.markers){
-      this.initMarker(nextState);
+
+    if (nextProps.Map.type == 'getMapItemsSuccess'){
+
+      nextState.stations = nextProps.Map.result;
+      nextProps.dispatch({type:'getMapItemsCompleted'});
+      this.initMarker(nextProps, nextState);
+    } else if (nextProps.Map.type == 'filterMapItems') {
+      nextState.stations = nextProps.Map.temp_result;
+      nextProps.dispatch({type:'filterMapItemsSuccess'});
+      this.initMarker(nextProps, nextState);
+    } else if (nextState.stations != null && nextState.stations != nextState.stations){
+    // } else if (nextState.markers != null && this.state.markers != nextState.markers){
+      this.initMarker(nextProps, nextState);
     }
+
   }
 
   clickMapListItem(marker){
@@ -34,20 +53,14 @@ class MapComponent extends React.Component {
     this.state.map.setZoom(18);
   }
 
-  async fetchMarker(){
-    try {
-      const result = await fetch ("http://localhost:81/coursework/api/api.php?format=json&lang=en");
-      const json = await result.json();
-      console.log(json);
-      this.setState({markers: json.stationList.station });
-    } catch (e){
-      console.log(e);
-    }
+  fetchMarker(){
+    this.props.dispatch({type:'getMapItems', dispatch: this.props.dispatch});
   }
 
-  initMarker(nextState){
-
-    nextState.markers.map((markerJSON,index)=> {
+  initMarker(nextProps, nextState){
+    this.clearMarkers(nextState);
+    nextState.stations.map((markerJSON,index)=> {
+    //nextState.markers.map((markerJSON,index)=> {
         const temp_index = index + 1;
         const marker = new google.maps.Marker({
           map: nextState.map,
@@ -56,7 +69,6 @@ class MapComponent extends React.Component {
           position: {lat: parseFloat(markerJSON.lat), lng: parseFloat(markerJSON.lng)}
         });
         marker.addListener('click', () => {
-
           let content = "";
           if (markerJSON.no)
             content += "<p>No: " + temp_index + "</p>";
@@ -72,9 +84,16 @@ class MapComponent extends React.Component {
           });
           infoWindow.open(nextState.map, marker);
         })
+        nextState.markers.push(marker);
       }
     );
+  }
 
+  clearMarkers(nextState){
+    nextState.markers.map((marker)=>{
+      marker.setMap(null);
+    })
+    nextState.markers = [];
   }
 
   initMap(){
@@ -89,8 +108,10 @@ class MapComponent extends React.Component {
   }
 
   renderMapList(){
-      if (this.state.markers) {
-        return <div id="mapList" ref="mapList" className="mapListContainer">{this.state.markers.map((marker,index)=>{
+    if (this.state.stations) {
+      // if (this.state.markers) {
+      return <div id="mapList" ref="mapList" className="mapListContainer">{this.state.stations.map((marker,index)=>{
+        // return <div id="mapList" ref="mapList" className="mapListContainer">{this.state.markers.map((marker,index)=>{
           const temp_index = index + 1;
           const no = (index < 9)? "00" + temp_index : (index < 99)? "0" + temp_index : temp_index;
           return (<div className="mapList" onClick={()=>this.clickMapListItem(marker)}  key={marker.no}>
@@ -110,10 +131,10 @@ class MapComponent extends React.Component {
 
   render(){
     return (
-      <div className="mapContainer">
-        {this.renderMapList()}
-        <div id="map" ref="map"></div>
-      </div>
+        <div className="mapContainer">
+          {this.renderMapList()}
+          <div id="map" ref="map"></div>
+        </div>
     )
   }
 }
