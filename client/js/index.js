@@ -13,12 +13,16 @@ class IndexComponent extends React.Component {
         <MapFilter store={root} />
         <Map store={root} />
         <ClientAddMap store={root} />
-        <SearchMapKeyword store={root} />
-        <AddMap store={root} />
+
       </div>
     );
   }
 };
+
+/*
+<SearchMapKeyword store={root} />
+<AddMap store={root} />
+*/
 
 const root = RootReducerStore;
 const Index = connect(state=>state,null)(IndexComponent);

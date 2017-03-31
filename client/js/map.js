@@ -121,18 +121,22 @@ class MapComponent extends React.Component {
     });
     //client click new map marker
     map.addListener('click', (e)=>{
+      if (this.state.clientAddMarkers.length+1 <= 10 ){
+        let clientAddMarker = new google.maps.Marker({
+          position: e.latLng,
+          map: this.state.map,
+          draggable: true,
+          icon: './img/flag2_32.png',
+          label: this.state.clientAddMarkers.length+1+"",
+        });
 
-      let clientAddMarker = new google.maps.Marker({
-        position: e.latLng,
-        map: this.state.map,
-        draggable: true,
-        icon: './img/flag2_32.png',
-        label: this.state.clientAddMarkers.length+1+"",
-      });
+        this.state.clientAddMarkers.push(clientAddMarker);
+        this.props.dispatch({type:'addClientMarkers', payload: this.state.clientAddMarkers})
+        console.log(e);
+      } else {
+        alert("You cant create more than 10 markers")
+      }
 
-      this.state.clientAddMarkers.push(clientAddMarker);
-      this.props.dispatch({type:'addClientMarkers', payload: this.state.clientAddMarkers})
-      console.log(e);
     })
     this.setState({map: map});
   }
