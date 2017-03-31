@@ -2,37 +2,36 @@ const {connect} = ReactRedux;
 
 class MapFilterComponent extends React.Component {
 
+  //init variables
   constructor(props){
     super(props);
     this.state = {
       filterAddress: '',
       filterProvider: '',
+      timer: null,
     }
   }
 
   componentWillUpdate(nextProps, nextState){
 
+    //check input not equal before
     if (nextState.filterAddress != this.state.filterAddress || nextState.filterProvider != this.state.filterProvider){
-      // const stations = nextProps.Map.result.stationList.station;
-      // nextState.markers = stations.filter((item, index, array)=>{
-      //   if (item.address.toUpperCase().indexOf(nextState.filterAddress.toUpperCase()) > -1)
-      //     return true;
-      // });
-      nextProps.dispatch({type:'filterMapItems',filterAddress:nextState.filterAddress, filterProvider:nextState.filterProvider, dispatch: nextProps.dispatch});
+
+      //clear the timer when user input
+      clearTimeout(this.state.timer);
+      this.setState({timer: setTimeout(()=>{
+        //notify to filter items
+        nextProps.dispatch({type:'filterMapItems',filterAddress:nextState.filterAddress, filterProvider:nextState.filterProvider, dispatch: nextProps.dispatch});
+      },1000)});
     }
   }
 
-  // shouldComponentUpdate(nextProps, nextState){
-  //   if (nextState.filterAddress != this.state.filterAddress || nextState.filterProvider != this.state.filterProvider){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
+  //change the address of filter
     changeFilterAddress(e){
       this.setState({filterAddress: e.target.value});
     }
 
+    //change the address of filter
     changeFilterProvider(e){
       this.setState({filterProvider: e.target.value});
     }

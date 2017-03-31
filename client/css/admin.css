@@ -3,6 +3,8 @@ html, body { width:100%; height: 100%; background-color: #d9d9d9; border: 0; pad
   white-space: nowrap;}
 input, button { border: 0; padding: 0; margin: 0;}
 
+
+
 /*
 .login_page {
   width: 100%;
@@ -13,9 +15,9 @@ input, button { border: 0; padding: 0; margin: 0;}
 
 /* real width */
 .filterContainer {
-  width:1684px;
+  width: 100%;
   background-color: #e6e6e6;
-  padding: 5px;
+  padding: 5px 0 5px 5px;
   border: 1px solid #b3b3b3;
 }
 
@@ -38,9 +40,10 @@ input, button { border: 0; padding: 0; margin: 0;}
 }
 
 .alertBackground {
-  /*
+  width:100%;
+  height:100%;
   position: fixed;
-  top:0px;
+  /*top:0px;
   left:0px;
   */
   background-color: #000000;
@@ -86,6 +89,10 @@ input, button { border: 0; padding: 0; margin: 0;}
 }
 
 .stationListContainer {
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
 }
 
 .stationListContainer .title {
@@ -120,7 +127,7 @@ input, button { border: 0; padding: 0; margin: 0;}
 
 /*real width*/
 .stationList {
-  width:1720px;
+  width:100%;
   height: 800px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -142,7 +149,7 @@ input, button { border: 0; padding: 0; margin: 0;}
 
 .login .title {
   text-align: center;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
 }
 
@@ -153,7 +160,7 @@ input, button { border: 0; padding: 0; margin: 0;}
 
 .login .input input{
   padding: 5px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .stationListTable {

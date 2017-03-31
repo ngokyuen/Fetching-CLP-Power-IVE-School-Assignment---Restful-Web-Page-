@@ -2,6 +2,14 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'addClientMarkers':
+      return {
+        ...state, type: 'addClientMarkers', clientAddMarkers: action.payload
+      }
+    case 'addClientMarkersSuccess':
+      return {
+        ...state, type: 'addClientMarkersSuccess'
+      }
     case 'filterMapItems':
       const result = state.result.filter((item)=>{
         if (item.address.toUpperCase().indexOf(action.filterAddress.toUpperCase()) > -1 && item.provider.toUpperCase().indexOf(action.filterProvider.toUpperCase())>-1)

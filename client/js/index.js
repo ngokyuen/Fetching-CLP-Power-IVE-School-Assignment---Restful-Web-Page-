@@ -12,6 +12,7 @@ class IndexComponent extends React.Component {
         <Menu store={root} />
         <MapFilter store={root} />
         <Map store={root} />
+        <ClientAddMap store={root} />
         <SearchMapKeyword store={root} />
         <AddMap store={root} />
       </div>

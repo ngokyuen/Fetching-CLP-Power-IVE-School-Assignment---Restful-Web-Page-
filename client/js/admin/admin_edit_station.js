@@ -3,6 +3,7 @@ const {connect} = ReactRedux;
 
 class AdminEditStationComponent extends React.Component {
 
+  //init
   constructor(props){
     super(props);
     this.state = {
@@ -32,6 +33,7 @@ class AdminEditStationComponent extends React.Component {
     }
   }
 
+  //update to state
   importStation(nextProps){
     try {
       const {load_station_result} = nextProps.Admin;
@@ -59,6 +61,7 @@ class AdminEditStationComponent extends React.Component {
     }
   }
 
+  //encode uri & notify to update station
   clickEditButton(id){
     const editStation = "address='" + this.state.address + "', districtL='" + this.state.districtL +
     "', districtS='" + this.state.districtS + "', img='" + this.state.img +
@@ -82,17 +85,18 @@ class AdminEditStationComponent extends React.Component {
 
   render(){
     try {
+      //check the value of load_station_result
       const {load_station_result} = this.props.Admin;
       if (load_station_result != null){
         const {stationList} = load_station_result;
         if (stationList != null){
           const {station} = stationList;
           //get the largest element width & height
-          const style = {width: document.getElementById('stationList').clientWidth,
-           height: document.getElementById('container').clientHeight};
+          // const style = {width: document.getElementById('stationList').clientWidth,
+          //  height: document.getElementById('container').clientHeight};
             return (
                 <div className="alertContainer" >
-                  <div onClick={this.clearLoadStation.bind(this)} className="alertBackground" style={style}>&nbsp;</div>
+                  <div onClick={this.clearLoadStation.bind(this)} className="alertBackground" >&nbsp;</div>
                   <div className="table">
                     <div className="row">
                       <div className="cell">Address</div>
@@ -166,6 +170,7 @@ class AdminEditStationComponent extends React.Component {
 
   }
 
+  //start: change input functions
   changeAddress(e){
     this.setState({address: e.target.value});
   }

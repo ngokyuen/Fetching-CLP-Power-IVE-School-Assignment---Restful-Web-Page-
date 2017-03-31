@@ -11,8 +11,45 @@ body, html {
   height: 100%;
 }
 
-input {font-size: 20px;}
-button {font-size: 20px;}
+input {font-size: 20px; }
+button {font-size: 18px; border: 0; padding: 7px 15px; border-radius: 2px; box-shadow: 1px 2px #666666;}
+button:hover {opacity: 0.7;}
+
+.clientAddMapComponent {
+  width: 100%;
+  padding: 0px 20px;
+  text-align: center;
+}
+
+.clientAddMapComponent .header{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.clientAddMapComponent .header img {
+  width: 32px;
+  height: 32px;
+}
+
+.clientAddMapComponent .clientAddMap {
+  width: 100%;
+  padding: 0px 20px;
+}
+
+.clientAddMapComponent .inputs {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.clientAddMapComponent .inputs input{
+  width: 160px;
+  padding: 5px 10px;
+  border: 1px solid #bfbfbf;
+}
+
+.clientAddMapComponent .inputs button{
+  box-shadow: 0px 0px;
+}
 
 .mapFilterContainer {
     padding: 0 20px;
@@ -23,6 +60,8 @@ button {font-size: 20px;}
   font-size: 24px;
   font-weight: bold;
 }
+
+
 
 .mapFilterContainer .mapFilter {
   padding-top: 10px;

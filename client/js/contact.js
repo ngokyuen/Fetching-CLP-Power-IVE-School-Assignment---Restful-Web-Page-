@@ -6,10 +6,12 @@ class ContactComponent extends React.Component {
     super(props);
   }
 
+  //close the alert dialog when click the background
   clickBackground(){
     this.props.dispatch({type:'clear_page'});
   }
 
+  
   render(){
     const {page} = this.props.Page;
 
