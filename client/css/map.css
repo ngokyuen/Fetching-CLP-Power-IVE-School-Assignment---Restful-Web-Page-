@@ -1,7 +1,35 @@
 
+.mapRightFloatShortcutContainer {
+  position: fixed;
+  right: 0px;
+  top: 270px;
+  z-index: 9000;
+}
+
+.mapRightFloatItem {
+  opacity: 0.6;
+  background-color: #ffffff;
+  padding: 5px;
+  float: right;
+  clear: both;
+}
+
+.mapRightFloatItem img{
+  width: 25px;
+}
+
+
+.mapRightFloatItem:hover {
+  opacity: 1;
+  border: 1px solid #bfbfbf;
+  border-right: 0px;
+  padding-right: 30px;
+}
+
+
 .mapFilterContainer {
-    padding: 0 20px;
-    padding-top: 10px;
+  padding: 0 20px;
+  padding-top: 10px;
 }
 
 .mapFilterContainer .header {

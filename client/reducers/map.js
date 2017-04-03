@@ -2,6 +2,10 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'mapMoveTo':
+      return {
+        ...state, type: 'mapMoveTo', lat: action.lat, lng: action.lng
+      }
     case 'addClientMarkers':
       return {
         ...state, type: 'addClientMarkers', clientAddMarkers: action.payload

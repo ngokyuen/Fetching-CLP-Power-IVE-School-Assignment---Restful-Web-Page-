@@ -35,6 +35,12 @@ class MapComponent extends React.Component {
       this.props.dispatch({type:'addClientMarkersSuccess'});
     }
 
+    if (nextProps.Map.type == 'mapMoveTo'){
+      const latlng = new google.maps.LatLng(nextProps.Map.lat, nextProps.Map.lng);
+      this.state.map.panTo(latlng);
+      this.state.map.setZoom(18);
+    }
+
     return false;
   }
 

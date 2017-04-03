@@ -12,6 +12,7 @@ class IndexComponent extends React.Component {
         <Menu store={root} />
         <MapFilter store={root} />
         <Map store={root} />
+        <MapRightFloatShortcut store={root} />
         <ClientAddMap store={root} />
 
       </div>
