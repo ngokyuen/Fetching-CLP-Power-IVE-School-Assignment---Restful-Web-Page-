@@ -8,7 +8,7 @@
 
 .mapRightFloatItem {
   opacity: 0.6;
-  background-color: #ffffff;
+  background-color: #d9d9d9;
   padding: 5px;
   float: right;
   clear: both;
@@ -20,10 +20,13 @@
 
 
 .mapRightFloatItem:hover {
-  opacity: 1;
+  opacity: 0.9;
   border: 1px solid #bfbfbf;
   border-right: 0px;
+  padding: 10px;
   padding-right: 30px;
+  background-color: #000;
+  color: #fff;
 }
 
 

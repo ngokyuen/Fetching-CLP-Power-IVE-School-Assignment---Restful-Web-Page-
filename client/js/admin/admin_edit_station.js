@@ -116,7 +116,12 @@ class AdminEditStationComponent extends React.Component {
                     </div>
                     <div className="row">
                       <div className="cell">Approved</div>
-                      <div className="cell"><input onChange={this.changeApproved.bind(this)} value={this.state.is_approved} /></div>
+                      <div className="cell">
+                      <select onChange={this.changeApproved.bind(this)} value={this.state.is_approved}>
+                        <option value="1">True</option>
+                        <option value="0">False</option>
+                      </select>
+                      </div>
                     </div>
                     <div className="row">
                       <div className="cell">Language</div>
