@@ -40,7 +40,7 @@ class ClientAddMapComponent extends React.Component {
     if (clientAddMarkers != null) {
       return (
         <div className="clientAddMapComponent">
-
+          {this.renderClientAddMarkers()}
           <div className="inputs">Provider <input onChange={this.changeProvider.bind(this)} value={this.state.provider} placeholder="Enter Your Name" /><button onClick={this.submitClientAddMap.bind(this)}>Submit</button></div>
         </div>
       );
