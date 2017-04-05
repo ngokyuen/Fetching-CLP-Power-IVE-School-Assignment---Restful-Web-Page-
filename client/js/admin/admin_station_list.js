@@ -8,6 +8,7 @@ class AdminStationListComponent extends React.Component {
       no: '',location: '',
       type: '',district: '',
       address: '',provider: '',
+      is_approved: '',
     }
   }
 
@@ -40,7 +41,7 @@ class AdminStationListComponent extends React.Component {
     const filterStations = stations.filter((item, index, array)=>{
       if (this.state.no != '' || this.state.location != ''
       || this.state.type != '' || this.state.district != ''
-      || this.state.address != '' || this.state.provider != ''){
+      || this.state.address != '' || this.state.provider != '' || this.state.is_approved != '' ){
 
         let result = true;
 
@@ -56,6 +57,8 @@ class AdminStationListComponent extends React.Component {
            result = result && false;
         if (this.state.provider != '' && item.provider.toUpperCase().indexOf(this.state.provider.toUpperCase()) === -1)
            result = result && false;
+         if (this.state.is_approved != '' && item.is_approved.toUpperCase().indexOf(this.state.is_approved.toUpperCase()) === -1)
+            result = result && false;
 
         return result;
       } else {
@@ -90,6 +93,10 @@ class AdminStationListComponent extends React.Component {
     this.setState({provider: e.target.value});
   }
 
+  changeApproved(e){
+    this.setState({is_approved: e.target.value});
+  }
+
   renderHeader(){
     return (
       <div className="filterContainer">
@@ -102,6 +109,7 @@ class AdminStationListComponent extends React.Component {
             <span><span>District</span><input onChange={this.changeDistrict.bind(this)} className="searchInput" type="text"  /></span>
             <span><span>Address</span><input onChange={this.changeAddress.bind(this)} className="searchInput" type="text"  /></span>
             <span><span>Provider</span><input onChange={this.changeProvider.bind(this)} className="searchInput" type="text" /></span>
+            <span><span>Approved</span><select  className="searchSelect" onChange={this.changeApproved.bind(this)}><option value=""></option><option value="1">True</option><option value="0">False</option></select></span>
           </div>
       </div>
     )
