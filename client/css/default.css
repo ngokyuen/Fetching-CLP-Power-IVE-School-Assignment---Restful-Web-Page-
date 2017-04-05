@@ -46,7 +46,7 @@ button:hover {opacity: 0.7;}
 }
 
 .clientAddMapComponent .clientAddMarkers .clientAddMarker {
-  border: 1px solid #999999;
+  border: 0px solid #999999;
   background-color: #ffffff;
   padding: 20px;
   width: 200px;
@@ -55,7 +55,11 @@ button:hover {opacity: 0.7;}
 }
 
 .clientAddMapComponent .clientAddMarkers .clientAddMarker:hover {
-  opacity: 0.4;
+  opacity: 0.7;
+  background-color: #3399ff;
+  color: #fff;
+  padding: 40px;
+  border: 1px solid #000;
 }
 
 .clientAddMapComponent .clientAddMarkers .clientAddMarker img{
@@ -140,4 +144,29 @@ button:hover {opacity: 0.7;}
 .alertContainer .alert .content a{
   text-decoration: none;
   color: #000000;
+}
+
+.alertContainer .alert .content .bottom_buttons {
+  padding: 10px;
+}
+
+.alertContainer .alert .content .bottom_buttons button {
+  margin: 0 10px;
+}
+
+.table {
+  display: table;
+}
+
+.row {
+  display: table-row;
+  padding: 10px;
+}
+
+.column {
+  display: table-cell;
+}
+
+.header_column{
+  display: table-caption;
 }
