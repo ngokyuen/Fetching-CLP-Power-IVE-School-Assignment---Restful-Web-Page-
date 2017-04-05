@@ -2,6 +2,27 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'deleteClientAddMarker':
+
+      //filter client added marker
+      state.clientAddMarkers = state.clientAddMarkers.filter(
+        (clientAddMarker,index) => {
+          if (index !== action.payload){
+            return true;
+          } else {
+            clientAddMarker.setMap(null);
+            return false;
+          }
+        }
+      );
+
+      //reset client added marker label
+      state.clientAddMarkers.map((clientAddMarker, index)=>{
+        clientAddMarker.setLabel(index+1+"");
+      });
+      return {
+        ...state, type: 'deleteClientAddMarker',
+      }
     case 'mapMoveTo':
       return {
         ...state, type: 'mapMoveTo', lat: action.lat, lng: action.lng
@@ -15,24 +36,23 @@ const MapStoreReducer = (state=[], action)=> {
         ...state, type: 'addClientMarkersSuccess'
       }
     case 'filterMapItems':
-      const result = state.result.filter((item)=>{
+      const result = state.Markers.filter((item)=>{
         if (item.address.toUpperCase().indexOf(action.filterAddress.toUpperCase()) > -1 && item.provider.toUpperCase().indexOf(action.filterProvider.toUpperCase())>-1)
           return true;
       });
       return {
-        ...state, type: 'filterMapItems', temp_result: result
+        ...state, type: 'filterMapItems', FilteredMarkers: result
       }
     case 'filterMapItemsSuccess':
       return {
-        ...state, type: 'filterMapItemsSuccess', temp_result: ''
+        ...state, type: 'filterMapItemsSuccess', FilteredMarkers: ''
       }
     case 'getMapItems':
       try {
          fetch ("http://localhost:81/coursework/api/api.php?format=json&lang=en").then((response)=>{
            response.json().then((json)=>{
              console.log(json);
-             action.dispatch({type: 'getMapItemsSuccess', result:json.stationList.station});
-
+             action.dispatch({type: 'getMapItemsSuccess', Markers:json.stationList.station});
            });
          });
       } catch (e){
@@ -44,7 +64,7 @@ const MapStoreReducer = (state=[], action)=> {
       }
     case 'getMapItemsSuccess':
       return {
-        ...state, type: 'getMapItemsSuccess', result:action.result
+        ...state, type: 'getMapItemsSuccess', Markers:action.Markers
       }
     case 'clearMapListItems':
       state.addMapListItems = [];
@@ -79,15 +99,12 @@ const MapStoreReducer = (state=[], action)=> {
                 alert("Create Successfully");
                 action.dispatch({type:'clearMapListItems'});
               }
-
             });
-
           })
           return {
             ...state
           }
         // console.log(encodeURIComponent(JSON.stringify(action.payload.mapdetails)));
-
         } catch (e) {
           console.log(e);
         }

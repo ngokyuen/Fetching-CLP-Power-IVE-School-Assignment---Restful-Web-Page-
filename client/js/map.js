@@ -40,26 +40,25 @@ class MapComponent extends React.Component {
       this.state.map.panTo(latlng);
       this.state.map.setZoom(18);
     }
-
     return false;
   }
 
   componentWillUpdate(nextProps, nextState){
+
     //when get map items success
     if (nextProps.Map.type == 'getMapItemsSuccess'){
-      nextState.stations = nextProps.Map.result;
+      nextState.stations = nextProps.Map.Markers;
       nextProps.dispatch({type:'getMapItemsCompleted'});
       this.initMarker(nextProps, nextState);
     //filter case
     } else if (nextProps.Map.type == 'filterMapItems') {
-      nextState.stations = nextProps.Map.temp_result;
+      nextState.stations = nextProps.Map.FilteredMarkers;
       nextProps.dispatch({type:'filterMapItemsSuccess'});
       this.initMarker(nextProps, nextState);
     } else if (nextState.stations != null && nextState.stations != nextState.stations){
     // } else if (nextState.markers != null && this.state.markers != nextState.markers){
       this.initMarker(nextProps, nextState);
     }
-
   }
 
   //when click the map list item
@@ -104,10 +103,8 @@ class MapComponent extends React.Component {
           });
           infoWindow.open(nextState.map, marker);
         })
-
         //store the variable to state
         nextState.markers.push(marker);
-
       }
     );
   }
@@ -142,7 +139,6 @@ class MapComponent extends React.Component {
       } else {
         alert("You cant create more than 10 markers")
       }
-
     })
     this.setState({map: map});
   }
@@ -158,7 +154,6 @@ class MapComponent extends React.Component {
             <div className="sub_left">
               <div className="no">{no}</div>
             </div>
-
              <div className="sub_right">
                <div className="address">{marker.address}</div>
                <div className="provider">Provider: {marker.provider}</div>
