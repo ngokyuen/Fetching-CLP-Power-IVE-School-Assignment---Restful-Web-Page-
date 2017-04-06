@@ -7,6 +7,7 @@ class ClientAddMapComponent extends React.Component {
     const {type} = nextProps.Map;
     if (type == 'deleteClientAddMarkerSuccess'){
       this.closeMarkerDetailDialog();
+      this.clearStateClientAddMarkersDetail();
       this.props.dispatch({type:'deleteClientAddMarkerCompleted'})
     } else if (type == 'closeMarkerDetailDialog') {
       this.closeMarkerDetailDialog();
@@ -14,6 +15,27 @@ class ClientAddMapComponent extends React.Component {
       //get map detail by lat lng through google geo
       this.searchMapDetailByLatLng(nextProps, nextState);
     }
+  }
+
+  clearStateClientAddMarkersDetail(){
+    const {clientAddMarkers} = this.props.Map;
+    let temp_index = 0;
+    this.state.clientAddMarkersDetail = this.state.clientAddMarkersDetail.filter((clientAddMarkerDetail, index)=>{
+      const {lat, lng} = clientAddMarkerDetail;
+      const clientAddMarker = clientAddMarkers.find((clientAddMarker)=>{
+        if (lat === clientAddMarker.position.lat() && lng === clientAddMarker.position.lng()){
+          return true;
+        }
+      });
+
+      if (clientAddMarker != null){
+        clientAddMarkerDetail.index=temp_index;
+        temp_index += 1;
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 
   searchMapDetailByLatLng(nextProps, nextState){
@@ -150,14 +172,27 @@ class ClientAddMapComponent extends React.Component {
         {this.renderMarkerDetailDialog()}
         <div className="title">Your Recommendation</div>
         {clientAddMarkers.map((clientAddMarker, index)=>{
+          const {clientAddMarkersDetail} = this.state;
+          const clientAddMarkerDetail = clientAddMarkersDetail.find((clientAddMarkerDetail)=> {
+              return (clientAddMarkerDetail.index===index)
+          } )
+
+          let status = '';
+          if (clientAddMarkerDetail) {
+            status = clientAddMarkerDetail.result.status;
+          }
+
           return (
             <div key={index} className="clientAddMarker" onClick={this.openMarkerDetailDialog.bind(this, index)}>
                 <div><img src="./img/flag3_565_720.png" /></div>
                 <div>{index+1}</div>
                 <div>
-                  <img className="statusIcon" src="./img/loading.gif" />
+                { (clientAddMarkerDetail)?
+                  (status === "OK") ? <img className="statusIcon" src="./img/tick.png" />:
                   <img className="statusIcon" src="./img/cross.png" />
-                  <img className="statusIcon" src="./img/tick.png" /></div>
+                  : <img className="statusIcon" src="./img/loading.gif" />
+                }
+                </div>
             </div>
           )
         })}

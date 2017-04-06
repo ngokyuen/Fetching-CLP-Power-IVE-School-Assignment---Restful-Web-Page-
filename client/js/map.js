@@ -196,6 +196,10 @@ class MapComponent extends React.Component {
           label: this.state.clientAddMarkers.length+1+"",
         });
 
+        google.maps.event.addListener(clientAddMarker, 'dragend', (e)=>{
+          this.props.dispatch({type: 'addClientMarkersSuccess'});
+        });
+
         this.state.clientAddMarkers.push(clientAddMarker);
         this.props.dispatch({type:'addClientMarkers', payload: this.state.clientAddMarkers});
 
