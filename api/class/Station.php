@@ -7,6 +7,7 @@ class Station extends Generate {
     private $no, $address;
     private $searchMapKeyword;
     private $searchMapDetailByPlaceId;
+    private $searchMapDetailByLatLng;
 
     public function __construct($sql) {
       parent::__construct($sql);
@@ -44,8 +45,13 @@ class Station extends Generate {
         echo json_encode($result);
 
       } catch (Exception $e){
-        echo $e->getMessage();
+        Header('Content-type: text/json');
+        echo json_encode(array("code" => '1300', "msg" => "Error in service"));
       }
+    }
+
+    private function setSearchMapDetailByLatLng($LatLng){
+      $this->searchMapDetailByLatLng = $LatLng;
     }
 
     private function setSearchMapDetailByPlaceId($place_id){
@@ -69,7 +75,7 @@ class Station extends Generate {
       if (isset($this->no) && $this->no != ''){
         return $this->getStation(" no=" . $this->no);
       } else {
-        if ($_SERVER['HTTP_REFERER'] == 'http://localhost:81/coursework/client/admin.html')
+        if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'http://localhost:81/coursework/client/admin.html')
           return $this->getAllStations_Admin();
         else
           return $this->getAllStations_Client();
@@ -77,10 +83,11 @@ class Station extends Generate {
     }
 
     public function getAllStations($cond=null) {
-      if ($this->searchMapDetailByPlaceId){
-        return $this->getMapDetailByPlaceId();
-      }
-      else if ($this->searchMapKeyword){
+      if ($this->searchMapDetailByLatLng){
+        return $this->searchMapDetailByLatLng();
+      } else if ($this->searchMapKeyword){
+        return $this->searchMapKeyword();
+      } else if ($this->searchMapKeyword){
         return $this->searchMapKeyword();
       } else {
         $query = "SELECT * FROM station";
@@ -88,8 +95,13 @@ class Station extends Generate {
         if ($cond){
           $query .= $cond;
         }
-        $result = $this->sql->query($query);
-        return $result->fetch_all(MYSQLI_ASSOC);
+
+        if ($result = $this->sql->query($query)) {
+          return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+          return array("code" => '1300', "msg" => "Error in service");
+        }
+
       }
     }
 
@@ -130,10 +142,13 @@ class Station extends Generate {
       if (isset($_gets['searchMapDetailByPlaceId']) && $_gets['searchMapDetailByPlaceId'] != ""){
         $this->setSearchMapDetailByPlaceId($_gets['searchMapDetailByPlaceId']);
       }
+      if (isset($_gets['searchMapDetailByLatLng']) && $_gets['searchMapDetailByLatLng'] != ""){
+        $this->setSearchMapDetailByLatLng($_gets['searchMapDetailByLatLng']);
+      }
 
       foreach ($_gets as $key => $value) {
         if ($key != "no" && $key != "address" && $key != "format" && $key != "lang" &&
-         $key != "searchMapKeyword" && $key != "searchMapDetailByPlaceId" && $key != "action") {
+         $key != "searchMapKeyword" && $key != "searchMapDetailByLatLng" && $key != "searchMapDetailByPlaceId" && $key != "action") {
           return array("code" => '1200', "msg" => "Parameter not recognized");
         }
       }

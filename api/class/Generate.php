@@ -27,7 +27,7 @@ class Generate extends Basic {
     }
 
     private function outputXML($result_array) {
-        $xml = new SimpleXMLElement("<?xml version='1.0'?><stationList />");
+        $xml = new SimpleXMLElement("<?xml version='1.0' ?><stationList />");
         //print_r($result_array);
         foreach ($result_array as $result_item) {
             $xml_station = $xml->addChild("station");

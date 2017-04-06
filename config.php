@@ -8,4 +8,9 @@ $SQL_DATABASE="coursework";
 require_once '../class/Basic.php';
 
 //sql
-$SQL = new mysqli($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATABASE);
+
+try {
+  $SQL = new mysqli($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATABASE);
+} catch (Exception $e){
+
+}
