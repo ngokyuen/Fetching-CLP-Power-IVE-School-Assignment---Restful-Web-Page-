@@ -145,6 +145,46 @@ class MapComponent extends React.Component {
       center: {lat: 22.4, lng: 114.3000},
       zoom: 11
     });
+
+    //add place autocomplete
+    const input = document.getElementById('pac-input');
+    const autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', map);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    var infowindow = new google.maps.InfoWindow();
+    // var marker = new google.maps.Marker({
+    //   map: map,
+    // });
+
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      infowindow.close();
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        return;
+      }
+
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+      }
+      
+      map.setZoom(20);
+
+      // Set the position of the marker using the place ID and location.
+      // marker.setPlace(/** @type {!google.maps.Place} */ ({
+      //   placeId: place.place_id,
+      //   location: place.geometry.location
+      // }));
+      // marker.setVisible(true);
+
+      // infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+      //     'Place ID: ' + place.place_id + '<br>' +
+      //     place.formatted_address + '</div>');
+      // infowindow.open(map, marker);
+  });
+
     //client click new map marker
     map.addListener('click', (e)=>{
       if (this.state.clientAddMarkers.length+1 <= 10 ){
@@ -192,6 +232,7 @@ class MapComponent extends React.Component {
         <div className="mapContainer">
           {this.renderMapList()}
           <div id="map" ref="map"></div>
+          <input className="mapSearch" id="pac-input" />
         </div>
     )
   }
