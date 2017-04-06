@@ -16,12 +16,9 @@ const MapStoreReducer = (state=[], action)=> {
         }
       );
 
-      //reset client added marker label
-      state.clientAddMarkers.map((clientAddMarker, index)=>{
-        clientAddMarker.setLabel(index+1+"");
-      });
+
       return {
-        ...state, type: 'deleteClientAddMarker',
+        ...state, type: 'deleteClientAddMarker', delete_index: action.payload,
       }
     case 'mapMoveTo':
       return {

@@ -33,6 +33,9 @@ class MapComponent extends React.Component {
     if (nextProps.Map.type=="addClientMarkers"){
       //alert(nextState.clientAddMarkers.length);
       this.props.dispatch({type:'addClientMarkersSuccess'});
+    } else if (nextProps.Map.type=="deleteClientAddMarker"){
+      this.clearEmptyClientAddMarker(nextProps, nextState);
+      this.initClientAddMarkers(nextProps, nextState);
     }
 
     if (nextProps.Map.type == 'mapMoveTo'){
@@ -59,6 +62,25 @@ class MapComponent extends React.Component {
     // } else if (nextState.markers != null && this.state.markers != nextState.markers){
       this.initMarker(nextProps, nextState);
     }
+  }
+
+  clearEmptyClientAddMarker(nextProps, nextState){
+    //clear the client added marker which map attribute is null
+    nextState.clientAddMarkers = nextState.clientAddMarkers.filter((clientAddMarker, index)=>{
+      if (nextProps.Map.delete_index == index){
+        clientAddMarker.setMap(null);
+        return false;
+      } else {
+        return true;
+      }
+    });
+  }
+
+  initClientAddMarkers(nextProps, nextState){
+    //reset client added marker label
+    nextState.clientAddMarkers.map((clientAddMarker, index)=>{
+      clientAddMarker.setLabel(index+1+"");
+    });
   }
 
   //when click the map list item
