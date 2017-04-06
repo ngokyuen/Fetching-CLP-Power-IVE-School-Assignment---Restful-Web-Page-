@@ -117,7 +117,7 @@ class Station extends Generate {
     public function getStation($conditions) {
       $query = "SELECT * FROM station";
       $query .= " WHERE lang='" . $this->lang . "' AND deleted=0";
-      echo $query;
+      //echo $query;
       if ($conditions)
           $query .= " AND " . $conditions;
       if ($result = $this->sql->query($query)){

@@ -46,7 +46,7 @@ class Generate extends Basic {
             $xml_station->addChild("parkingNo", $result_item["parkingNo"]);
             $xml_station->addChild("img", $result_item["img"]);
         }
-        Header('Content-type: text/xml; charset=utf-8');
+        Header('Content-type: text/xml;');
         print_r($xml->asXML());
       }
 
@@ -80,7 +80,7 @@ class Generate extends Basic {
         $xml_error = $xml->addChild("error");
         $xml_error->addChild("code", $code);
         $xml_error->addChild("msg", $msg);
-        Header('Content-type: text/xml; charset=utf-8');
+        Header('Content-type: text/xml;');
         print_r($xml->asXML());
     }
 
