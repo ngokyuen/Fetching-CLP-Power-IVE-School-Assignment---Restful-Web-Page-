@@ -66,6 +66,11 @@ button:hover {opacity: 0.7;}
   height: 64px;
 }
 
+.clientAddMapComponent .clientAddMarkers .clientAddMarker .statusIcon{
+  width: 32px;
+  height: 32px;
+}
+
 .clientAddMapComponent .clientAddMarkers .clientAddMarker input{
   font-size: 14px;
   width: 150px;

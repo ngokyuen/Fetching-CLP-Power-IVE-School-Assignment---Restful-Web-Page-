@@ -4,10 +4,35 @@ const {connect} = ReactRedux;
 class ClientAddMapComponent extends React.Component {
 
   componentWillUpdate(nextProps, nextState){
-    if (nextProps.Map.type == 'deleteClientAddMarkerSuccess'){
+    const {type} = nextProps.Map;
+    if (type == 'deleteClientAddMarkerSuccess'){
       this.closeMarkerDetailDialog();
       this.props.dispatch({type:'deleteClientAddMarkerCompleted'})
+    } else if (type == 'closeMarkerDetailDialog') {
+      this.closeMarkerDetailDialog();
+    } else if (type == 'addClientMarkersSuccess'){
+      //get map detail by lat lng through google geo
+      this.searchMapDetailByLatLng(nextProps, nextState);
     }
+  }
+
+  searchMapDetailByLatLng(nextProps, nextState){
+    const {clientAddMarkers} = nextProps.Map;
+    this.state.clientAddMarkersDetail = [];
+    clientAddMarkers.map((clientAddMarker, index)=>{
+      const {position} = clientAddMarker;
+      const lat = position.lat();
+      const lng = position.lng();
+      fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
+        return response.json();
+      }).then((json)=>{
+        console.log(json);
+        this.state.clientAddMarkersDetail.push({result: json, index: index, lat:lat, lng:lng});
+      }).then(()=>{
+        nextProps.dispatch({type: 'updateClientAddMarkersDetail'});
+      })
+    });
+
   }
 
   constructor(props){
@@ -59,6 +84,7 @@ class ClientAddMapComponent extends React.Component {
 
   closeMarkerDetailDialog(){
     this.setState({showMarkerDetailDialog: false});
+    this.props.dispatch({type:'closeMarkerDetailDialogSuccess'})
   }
 
   renderMarkerDetailDialog(){
@@ -128,6 +154,10 @@ class ClientAddMapComponent extends React.Component {
             <div key={index} className="clientAddMarker" onClick={this.openMarkerDetailDialog.bind(this, index)}>
                 <div><img src="./img/flag3_565_720.png" /></div>
                 <div>{index+1}</div>
+                <div>
+                  <img className="statusIcon" src="./img/loading.gif" />
+                  <img className="statusIcon" src="./img/cross.png" />
+                  <img className="statusIcon" src="./img/tick.png" /></div>
             </div>
           )
         })}

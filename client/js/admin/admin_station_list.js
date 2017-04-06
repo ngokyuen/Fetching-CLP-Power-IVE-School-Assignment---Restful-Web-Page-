@@ -109,7 +109,7 @@ class AdminStationListComponent extends React.Component {
             <span><span>District</span><input onChange={this.changeDistrict.bind(this)} className="searchInput" type="text"  /></span>
             <span><span>Address</span><input onChange={this.changeAddress.bind(this)} className="searchInput" type="text"  /></span>
             <span><span>Provider</span><input onChange={this.changeProvider.bind(this)} className="searchInput" type="text" /></span>
-            <span><span>Approved</span><select  className="searchSelect" onChange={this.changeApproved.bind(this)}><option value=""></option><option selected value="1">True</option><option value="0">False</option></select></span>
+            <span><span>Approved</span><select value={this.state.is_approved} className="searchSelect" onChange={this.changeApproved.bind(this)}><option value=""></option><option value="1">True</option><option value="0">False</option></select></span>
           </div>
       </div>
     )

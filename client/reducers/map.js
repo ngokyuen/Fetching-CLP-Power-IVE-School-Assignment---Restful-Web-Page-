@@ -2,6 +2,15 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'updateClientAddMarkersDetail':
+      return {
+        ...state, type: 'updateClientAddMarkersDetail',
+      }
+    case 'closeMarkerDetailDialog':
+      return {
+        ...state, type: 'closeMarkerDetailDialog',
+      }
+
     case 'deleteClientAddMarker':
 
       //filter client added marker
@@ -15,7 +24,6 @@ const MapStoreReducer = (state=[], action)=> {
           }
         }
       );
-
 
       return {
         ...state, type: 'deleteClientAddMarker', delete_index: action.payload,

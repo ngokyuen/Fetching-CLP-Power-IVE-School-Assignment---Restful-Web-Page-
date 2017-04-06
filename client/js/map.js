@@ -169,8 +169,8 @@ class MapComponent extends React.Component {
       } else {
         map.setCenter(place.geometry.location);
       }
-      
-      map.setZoom(20);
+
+      map.setZoom(18);
 
       // Set the position of the marker using the place ID and location.
       // marker.setPlace(/** @type {!google.maps.Place} */ ({
@@ -197,10 +197,12 @@ class MapComponent extends React.Component {
         });
 
         this.state.clientAddMarkers.push(clientAddMarker);
-        this.props.dispatch({type:'addClientMarkers', payload: this.state.clientAddMarkers})
-        console.log(e);
+        this.props.dispatch({type:'addClientMarkers', payload: this.state.clientAddMarkers});
+
+        //this.props.dispatch({type:'closeMarkerDetailDialog'});
+        //console.log(e);
       } else {
-        alert("You cant create more than 10 markers")
+        alert("You cant create more than 10 markers");
       }
     })
     this.setState({map: map});
