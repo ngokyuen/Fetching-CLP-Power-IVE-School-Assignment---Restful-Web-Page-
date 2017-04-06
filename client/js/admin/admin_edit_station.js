@@ -104,11 +104,11 @@ class AdminEditStationComponent extends React.Component {
                     </div>
                     <div className="row">
                       <div className="cell">DistrictL</div>
-                      <div className="cell"><input onChange={this.changeDistrictL.bind(this)} value={this.state.districtL} /></div>
+                      <div className="cell">{this.renderDistrictL()}</div>
                     </div>
                     <div className="row">
                       <div className="cell">DistrictS</div>
-                      <div className="cell"><input onChange={this.changeDistrictS.bind(this)} value={this.state.districtS} /></div>
+                      <div className="cell">{this.renderDistrictS()}</div>
                     </div>
                     <div className="row">
                       <div className="cell">Img</div>
@@ -153,7 +153,7 @@ class AdminEditStationComponent extends React.Component {
                     </div>
                     <div className="row">
                       <div className="cell">Type</div>
-                      <div className="cell"><input onChange={this.changeType.bind(this)} value={this.state.type} /></div>
+                      <div className="cell">{this.renderType()}</div>
                     </div>
                     <div className="row">
                       <div className="cell"><button onClick={this.clickEditButton.bind(this, station._id)}  className="bottom_button">Submit</button></div>
@@ -174,6 +174,57 @@ class AdminEditStationComponent extends React.Component {
     }
 
   }
+
+
+    renderDistrictL(){
+      return (
+        <select onChange={this.changeDistrictL.bind(this)} value={this.state.districtL} >
+          <option value="Hong Kong Island">Hong Kong Island</option>
+          <option value="Kowloon">Kowloon</option>
+          <option value="New Territories">New Territories</option>
+          <option value="Outlying Islands">Outlying Islands</option>
+        </select>
+      )
+    }
+
+    renderType(){
+      return (
+        <select onChange={this.changeType.bind(this)} value={this.state.type} >
+          <option value="Standard">Standard</option>
+          <option value="Quick">Quick</option>
+          <option value="SemiQuick">SemiQuick</option>
+          <option value="Standard;Quick">Standard & Quick</option>
+          <option value="Standard;SemiQuick">Standard & SemiQuick</option>
+          <option value="Quick;SemiQuick">Quick & SemiQuick</option>
+          <option value="Standard;Quick;SemiQuick">Standard & Quick & SemiQuick</option>
+        </select>
+      )
+    }
+
+    renderDistrictS() {
+      return (
+        <select onChange={this.changeDistrictS.bind(this)} value={this.state.districtS}  >
+          <option value="Wong Tai Sin">Wong Tai Sin</option>
+          <option value="Yuen Long">Yuen Long</option>
+          <option value="Kwun Tong">Kwun Tong</option>
+          <option value="Sai Kung">Sai Kung</option>
+          <option value="Kwai Tsing">Kwai Tsing</option>
+          <option value="Outlying Islands">Outlying Islands</option>
+          <option value="North">North</option>
+          <option value="Yau Tsim Mong">Yau Tsim Mong</option>
+          <option value="Tai Po">Tai Po</option>
+          <option value="Sham Shui Po">Sham Shui Po</option>
+          <option value="Tuen Mun">Tuen Mun</option>
+          <option value="Tsuen Wan">Tsuen Wan</option>
+          <option value="Shatin">Shatin</option>
+          <option value="Central and Western">Central and Western</option>
+          <option value="Eastern">Eastern</option>
+          <option value="Southern">Southern</option>
+          <option value="Wan Chai">Wan Chai</option>
+          <option value="Kowloon City">Kowloon City</option>
+        </select>
+      )
+    }
 
   //start: change input functions
   changeAddress(e){

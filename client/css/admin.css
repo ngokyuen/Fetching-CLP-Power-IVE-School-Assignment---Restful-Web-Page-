@@ -80,8 +80,9 @@ input, button { border: 0; padding: 0; margin: 0;}
   text-align: center;
 }
 
-.alertContainer .cell input{
+.alertContainer .cell input, .alertContainer .cell select{
   font-size: 14px;
+  width: 100%;
 }
 
 .alertContainer .cell button{
