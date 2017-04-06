@@ -8,9 +8,5 @@ $SQL_DATABASE="coursework";
 require_once '../class/Basic.php';
 
 //sql
-
-try {
-  $SQL = new mysqli($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATABASE);
-} catch (Exception $e){
-
-}
+$SQL = new mysqli($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATABASE);
+//$SQL->set_charset("utf8");

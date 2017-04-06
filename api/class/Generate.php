@@ -27,6 +27,9 @@ class Generate extends Basic {
     }
 
     private function outputXML($result_array) {
+      if (isset($result_array['code']) || isset($result_array['msg'])){
+        $this->outputError($result_array['code'],$result_array['msg'] );
+      } else {
         $xml = new SimpleXMLElement("<?xml version='1.0' ?><stationList />");
         //print_r($result_array);
         foreach ($result_array as $result_item) {
@@ -43,20 +46,26 @@ class Generate extends Basic {
             $xml_station->addChild("parkingNo", $result_item["parkingNo"]);
             $xml_station->addChild("img", $result_item["img"]);
         }
-        Header('Content-type: text/xml');
+        Header('Content-type: text/xml; charset=utf-8');
         print_r($xml->asXML());
+      }
+
     }
 
     private function outputJSON($result_array) {
+      if (isset($result_array['code']) || isset($result_array['msg'])){
+        $this->outputError($result_array['code'],$result_array['msg'] );
+      } else {
         Header('Content-type: text/json');
         $json = array("stationList" => array("station"=> $result_array));
         echo json_encode($json);
+      }
     }
 
     public function outputError($code, $msg) {
         if ($this->format == 'json')
             $this->outputErrorJSON($code, $msg);
-        else
+        else if ($this->format == 'xml')
             $this->outputErrorXML($code, $msg);
     }
 
@@ -67,11 +76,11 @@ class Generate extends Basic {
     }
 
     private function outputErrorXML($code, $msg) {
-        $xml = new SimpleXMLElement("<?xml version='1.0'?><stationList/>");
+        $xml = new SimpleXMLElement("<?xml version='1.0' ?><stationList />");
         $xml_error = $xml->addChild("error");
         $xml_error->addChild("code", $code);
         $xml_error->addChild("msg", $msg);
-        Header('Content-type: text/xml');
+        Header('Content-type: text/xml; charset=utf-8');
         print_r($xml->asXML());
     }
 

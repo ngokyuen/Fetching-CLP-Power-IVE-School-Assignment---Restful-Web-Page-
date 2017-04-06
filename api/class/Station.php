@@ -92,16 +92,17 @@ class Station extends Generate {
       } else {
         $query = "SELECT * FROM station";
         $query .= " WHERE lang='" . $this->lang . "' AND deleted=0 ";
+
         if ($cond){
           $query .= $cond;
         }
-
+//echo $query;
         if ($result = $this->sql->query($query)) {
+          //print_r($result);
           return $result->fetch_all(MYSQLI_ASSOC);
         } else {
           return array("code" => '1300', "msg" => "Error in service");
         }
-
       }
     }
 
@@ -116,10 +117,15 @@ class Station extends Generate {
     public function getStation($conditions) {
       $query = "SELECT * FROM station";
       $query .= " WHERE lang='" . $this->lang . "' AND deleted=0";
+      echo $query;
       if ($conditions)
           $query .= " AND " . $conditions;
-      $result = $this->sql->query($query);
-      return $result->fetch_array(MYSQLI_ASSOC);
+      if ($result = $this->sql->query($query)){
+        return $result->fetch_array(MYSQLI_ASSOC);
+      } else {
+        return array("code" => '1300', "msg" => "Error in service");
+      }
+
     }
 
     public function importURLRequest($_gets) {
