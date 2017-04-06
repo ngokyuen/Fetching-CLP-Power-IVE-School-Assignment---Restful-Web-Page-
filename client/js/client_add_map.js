@@ -3,6 +3,13 @@ const {connect} = ReactRedux;
 
 class ClientAddMapComponent extends React.Component {
 
+  componentWillUpdate(nextProps, nextState){
+    if (nextProps.Map.type == 'deleteClientAddMarkerSuccess'){
+      this.closeMarkerDetailDialog();
+      this.props.dispatch({type:'deleteClientAddMarkerCompleted'})
+    }
+  }
+
   constructor(props){
     super(props);
     this.state = {

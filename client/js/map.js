@@ -36,6 +36,7 @@ class MapComponent extends React.Component {
     } else if (nextProps.Map.type=="deleteClientAddMarker"){
       this.clearEmptyClientAddMarker(nextProps, nextState);
       this.initClientAddMarkers(nextProps, nextState);
+      this.props.dispatch({type:'deleteClientAddMarkerSuccess'});
     }
 
     if (nextProps.Map.type == 'mapMoveTo'){
