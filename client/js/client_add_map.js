@@ -24,6 +24,7 @@ class ClientAddMapComponent extends React.Component {
   componentWillUpdate(nextProps, nextState){
     const {type} = nextProps.Map;
     if (type == 'deleteClientAddMarkerSuccess'){
+      this.state.markerDetailDialogIndex = null;
       this.closeMarkerDetailDialog();
       this.clearStateClientAddMarkersDetail();
       this.props.dispatch({type:'deleteClientAddMarkerCompleted'})
@@ -41,6 +42,7 @@ class ClientAddMapComponent extends React.Component {
     if (nextState.showMarkerDetailDialog && this.state.markerDetailDialogIndex != nextState.markerDetailDialogIndex){
 
       this.importValuesToMarkerDetailDialog(nextProps, nextState);
+
     }
   }
 
