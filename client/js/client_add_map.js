@@ -213,6 +213,10 @@ class ClientAddMapComponent extends React.Component {
       verifyAllCase = this.verifyClientAddMapDetail(index) && verifyAllCase;
     });
 
+    if (!verifyAllCase){
+     alert('Please check all Map Markers');
+    }
+
     //start to verify provider
     verifyAllCase = this.verifyProvider() && verifyAllCase;
     console.log(verifyAllCase);
