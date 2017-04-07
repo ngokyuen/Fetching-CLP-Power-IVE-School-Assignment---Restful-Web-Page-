@@ -3,6 +3,24 @@ const {connect} = ReactRedux;
 
 class ClientAddMapComponent extends React.Component {
 
+  //init state
+  constructor(props){
+    super(props);
+    this.state = {
+      provider: '',
+      verifyProvider: null,
+      clientAddMarkersDetail: [],
+      //for marker detail dialog
+      showMarkerDetailDialog: false,
+      markerDetailDialogIndex: null,
+      tempMarkerDetail: {
+        districtL: '', districtS: '', location: '',
+        address: '', type: '', img: '',
+        parkingNo: '', lang: 'EN',
+      }
+    }
+  }
+
   componentWillUpdate(nextProps, nextState){
     const {type} = nextProps.Map;
     if (type == 'deleteClientAddMarkerSuccess'){
@@ -15,6 +33,63 @@ class ClientAddMapComponent extends React.Component {
       //get map detail by lat lng through google geo
       this.searchMapDetailByLatLng(nextProps, nextState);
     }
+
+    //to input values to marker detail dialog
+    if (nextState.showMarkerDetailDialog && this.state.markerDetailDialogIndex != nextState.markerDetailDialogIndex){
+
+      this.importValuesToMarkerDetailDialog(nextProps, nextState);
+    }
+  }
+
+// input value to dialog
+  importValuesToMarkerDetailDialog(nextProps, nextState){
+    const {tempMarkerDetail, clientAddMarkersDetail, markerDetailDialogIndex} = nextState;
+    const clientAddMarkerDetail = clientAddMarkersDetail[markerDetailDialogIndex];
+    // console.log(clientAddMarkerDetail);
+    // console.log(tempMarkerDetail);
+    const {results, status} = clientAddMarkerDetail.result;
+
+    if (status == 'OK'){
+      const {address_components, formatted_address} = results[0];
+      console.log(address_components + " , " + formatted_address);
+      clientAddMarkerDetail.address = formatted_address;
+
+      let location = "";
+      let districtL = "";
+      let districtS = "";
+      address_components.map((address_component, index, array)=>{
+
+          //location case
+          if (index == 1 && location.length <= 5){
+            location += " " + address_components[index]['long_name'];
+          } else if (index == 0){
+            location += address_components[index]['long_name'];
+          }
+
+          //districtL case
+          if (index == array.length - 2 && array.length - 2 < 1){
+            districtL = address_component.long_name;
+          }
+
+          //districtS case
+          if (index == array.length - 3 && array.length - 2 < 1){
+            districtS = address_component.long_name;
+          }
+      })
+      clientAddMarkerDetail.districtS = districtS;
+      clientAddMarkerDetail.districtL = districtL;
+      clientAddMarkerDetail.location = location;
+    }
+
+    //import data from clientAddMarkersDetail to tempMarkerDetail
+     let {address, location, districtL, districtS, type, parkingNo, img} = clientAddMarkerDetail;
+     nextState.tempMarkerDetail.address=address;
+     nextState.tempMarkerDetail.location=location;
+     nextState.tempMarkerDetail.districtL=districtL;
+     nextState.tempMarkerDetail.districtS=districtS;
+     nextState.tempMarkerDetail.type=type;
+     nextState.tempMarkerDetail.parkingNo=parkingNo;
+     nextState.tempMarkerDetail.img=img;
   }
 
   clearStateClientAddMarkersDetail(){
@@ -38,6 +113,7 @@ class ClientAddMapComponent extends React.Component {
     });
   }
 
+  //get map detail by lat lng through google geo
   searchMapDetailByLatLng(nextProps, nextState){
     const {clientAddMarkers} = nextProps.Map;
     const {clientAddMarkersDetail} = this.state;
@@ -47,70 +123,93 @@ class ClientAddMapComponent extends React.Component {
       const {position} = clientAddMarker;
       const propsLat = position.lat();
       const propsLng = position.lng();
-
-        const clientAddMarkerDetail = clientAddMarkersDetail.find((clientAddMarkerDetail, stateIndex)=>{
-          const {lng, lat} = clientAddMarkerDetail;
-
-          if (lat == propsLat && lng == propsLng && stateIndex == propsIndex){
-            return true;
-          } else {
-            return false;
-          }
-        });
-
-        if (!clientAddMarkerDetail || clientAddMarkerDetail.result.status !== 'OK'){
-          //CLEAR sTATE DATA
-          this.state.clientAddMarkersDetail[propsIndex] = '';
-
-          fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + propsLat + "," + propsLng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
-            return response.json();
-          }).then((json)=>{
-            console.log(json);
-            this.state.clientAddMarkersDetail[propsIndex] = {result: json, index: propsIndex, lat: propsLat, lng:propsLng};
-          }).then(()=>{
-            nextProps.dispatch({type: 'updateClientAddMarkersDetail'});
-          })
+      const clientAddMarkerDetail = clientAddMarkersDetail.find((clientAddMarkerDetail, stateIndex)=>{
+        const {lng, lat} = clientAddMarkerDetail;
+        if (lat == propsLat && lng == propsLng && stateIndex == propsIndex){
+          return true;
+        } else {
+          return false;
         }
+      });
 
-    })
+      if (!clientAddMarkerDetail || clientAddMarkerDetail.result.status !== 'OK'){
+        //CLEAR sTATE DATA
+        this.state.clientAddMarkersDetail[propsIndex] = '';
 
-  }
-
-  constructor(props){
-    super(props);
-    this.state = {
-      provider: '',
-      clientAddMarkersDetail: [],
-      showMarkerDetailDialog: false,
-      tempMarkerDetail: {
-        index: 0,
-        lat: 0,
-        lng: 0,
-        districtL: '',
-        districtS: '',
-        location: '',
-        address: '',
-        type: '',
-        img: '',
-        parkingNo: '',
-        lang: 'EN',
+        fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + propsLat + "," + propsLng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
+          return response.json();
+        }).then((json)=>{
+          console.log(json);
+          this.state.clientAddMarkersDetail[propsIndex] = {result: json, index: propsIndex, lat: propsLat, lng:propsLng, address: '', location: '', districtL:'',districtS:'', type:'', img:'', parkingNo:''};
+        }).then(()=>{
+          nextProps.dispatch({type: 'updateClientAddMarkersDetail'});
+        })
       }
-    }
+    })
   }
+
 
 //update detail for client added map
   updateClientAddMapDetail(){
+    const {markerDetailDialogIndex, tempMarkerDetail, clientAddMarkersDetail} = this.state;
+    const clientAddMarkerDetail = clientAddMarkersDetail[markerDetailDialogIndex];
+    clientAddMarkerDetail.address = tempMarkerDetail.address;
+    clientAddMarkerDetail.location = tempMarkerDetail.location;
+    clientAddMarkerDetail.districtL = tempMarkerDetail.districtL;
+    clientAddMarkerDetail.districtS = tempMarkerDetail.districtS;
+    clientAddMarkerDetail.img = tempMarkerDetail.img;
+    clientAddMarkerDetail.parkingNo = tempMarkerDetail.parkingNo;
+    clientAddMarkerDetail.type = tempMarkerDetail.type;
+    this.closeMarkerDetailDialog();
+  }
 
+  verifyClientAddMapDetail(index){
+    try {
+      const {clientAddMarkersDetail} = this.state;
+      if (clientAddMarkersDetail && clientAddMarkersDetail.length > 0) {
+        const clientAddMarkerDetail = clientAddMarkersDetail[index];
+        const {address, districtL, districtS, location, type} = clientAddMarkerDetail;
+        if (address !== "" && districtL  !== "" && districtS  !== "" && location  !== "" && type  !== ""){
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } catch (e){
+      console.log(e);
+    }
+
+  }
+
+  verifyProvider(){
+    const reg = /\w{5,}/i;
+    if (this.state.provider.match(reg)){
+      this.setState({verifyProvider: true});
+      return true;
+    } else {
+      this.setState({verifyProvider: false});
+      return false;
+    }
   }
 
 //send request for delete client added map
   deleteClientAddMap(){
-    this.props.dispatch({type:'deleteClientAddMarker', payload:this.state.tempMarkerDetail.index});
+    this.props.dispatch({type:'deleteClientAddMarker', payload:this.state.markerDetailDialogIndex});
   }
 
 //send request for upload client added map to server
   submitClientAddMap(){
+    const {clientAddMarkersDetail} = this.state;
+    let verifyAllCase = true;
 
+    //start to verify all map detail
+    clientAddMarkersDetail.map((clientAddMarkerDetail, index)=>{
+      verifyAllCase = verifyAllCase && this.verifyClientAddMapDetail(index)
+    });
+
+    //start to verify provider
+    verifyAllCase = verifyAllCase && this.verifyProvider();
+    console.log(verifyAllCase);
   }
 
   changeProvider(e){
@@ -128,8 +227,11 @@ class ClientAddMapComponent extends React.Component {
     this.props.dispatch({type:'closeMarkerDetailDialogSuccess'})
   }
 
+  // marker detail dialog
   renderMarkerDetailDialog(){
-    if (this.state.showMarkerDetailDialog){
+    const {showMarkerDetailDialog, markerDetailDialogIndex, clientAddMarkersDetail} = this.state;
+    if (showMarkerDetailDialog === true){
+
       return (
         <div className="alertContainer">
           <div className="background" onClick={this.closeMarkerDetailDialog.bind(this)}></div>
@@ -138,11 +240,11 @@ class ClientAddMapComponent extends React.Component {
               <div className="content_content table">
                 <div className="row">
                   <div className="column">Location:</div>
-                  <div className="column"><input onChange={this.changeLocation.bind(this)} value={this.state.tempMarkerDetail.location} /></div>
+                  <div className="column"><input onChange={(e)=>this.changeLocation(e.target.value)} value={this.state.tempMarkerDetail.location} /></div>
                 </div>
                 <div className="row">
                   <div className="column">Address:</div>
-                  <div className="column"><input onChange={this.changeAddress.bind(this)} value={this.state.tempMarkerDetail.address} /></div>
+                  <div className="column"><input onChange={(e)=>this.changeAddress(e.target.value)} value={this.state.tempMarkerDetail.address} /></div>
                 </div>
                 <div className="row">
                   <div className="column">District(Long):</div>
@@ -164,15 +266,15 @@ class ClientAddMapComponent extends React.Component {
                 </div>
                 <div className="row">
                   <div className="column">Image:</div>
-                  <div className="column"><input onChange={this.changeImg.bind(this)} value={this.state.tempMarkerDetail.img} /></div>
+                  <div className="column"><input onChange={(e)=>this.changeImg(e.target.value)} value={this.state.tempMarkerDetail.img} /></div>
                 </div>
                 <div className="row">
                   <div className="column">Parking No:</div>
-                  <div className="column"><input onChange={this.changeParkingNo.bind(this)} value={this.state.tempMarkerDetail.parkingNo} /></div>
+                  <div className="column"><input onChange={(e)=>this.changeParkingNo(e.target.value)} value={this.state.tempMarkerDetail.parkingNo} /></div>
                 </div>
               </div>
               <div className="bottom_buttons">
-                <button onClick={this.updateClientAddMapDetail.bind(this)}>Submit</button>
+                <button onClick={this.updateClientAddMapDetail.bind(this)}>Update</button>
                 <button onClick={this.deleteClientAddMap.bind(this)}>Delete</button>
               </div>
             </div>
@@ -184,6 +286,7 @@ class ClientAddMapComponent extends React.Component {
     }
   }
 
+  //render client add markers page
   renderClientAddMarkers(){
     const {clientAddMarkers} = this.props.Map;
     return (
@@ -206,11 +309,16 @@ class ClientAddMapComponent extends React.Component {
                 <div><img src="./img/flag3_565_720.png" /></div>
                 <div>{index+1}</div>
                 <div>
-                { (clientAddMarkerDetail)?
-                  (status === "OK") ? <img className="statusIcon" src="./img/tick.png" />:
-                  <img className="statusIcon" src="./img/cross.png" />
-                  : <img className="statusIcon" src="./img/loading.gif" />
-                }
+                  { (clientAddMarkerDetail)?
+                    (status === "OK") ? <img className="statusIcon" src="./img/tick.png" />:
+                    <img className="statusIcon" src="./img/cross.png" />
+                    :<img className="statusIcon" src="./img/loading.gif" />
+                  }
+                  {
+                    (clientAddMarkerDetail && this.verifyClientAddMapDetail(index))?
+                    <img className="statusIcon" src="./img/tick.png" />
+                    : null
+                  }
                 </div>
             </div>
           )
@@ -221,11 +329,16 @@ class ClientAddMapComponent extends React.Component {
 
   render(){
     const {clientAddMarkers} = this.props.Map;
-    if (clientAddMarkers != null) {
+    if (clientAddMarkers && clientAddMarkers.length > 0) {
+      //this.verifyProvider();
       return (
         <div className="clientAddMapComponent">
           {this.renderClientAddMarkers()}
-          <div className="inputs">Provider <input onChange={this.changeProvider.bind(this)} value={this.state.provider} placeholder="Enter Your Name" /><button onClick={this.submitClientAddMap.bind(this)}>Submit</button></div>
+          <div className="inputs">Provider
+            <input onChange={this.changeProvider.bind(this)} value={this.state.provider} placeholder="Enter Your Name" />
+            {(this.state.verifyProvider)? <div className="error">Please input more than 5 words</div>:null}
+            <button onClick={this.submitClientAddMap.bind(this)}>Submit</button>
+          </div>
         </div>
       );
     } else {
@@ -235,7 +348,8 @@ class ClientAddMapComponent extends React.Component {
 
   renderDistrictL(){
     return (
-      <select onChange={this.changeDistrictL.bind(this)} value={this.state.tempMarkerDetail.districtL} >
+      <select onChange={(e)=>this.changeDistrictL(e.target.value)} value={this.state.tempMarkerDetail.districtL} >
+        <option value=""></option>
         <option value="Hong Kong Island">Hong Kong Island</option>
         <option value="Kowloon">Kowloon</option>
         <option value="New Territories">New Territories</option>
@@ -246,7 +360,8 @@ class ClientAddMapComponent extends React.Component {
 
   renderType(){
     return (
-      <select onChange={this.changeType.bind(this)} value={this.state.tempMarkerDetail.type} >
+      <select onChange={(e)=>this.changeType(e.target.value)} value={this.state.tempMarkerDetail.type} >
+        <option value=""></option>
         <option value="Standard">Standard</option>
         <option value="Quick">Quick</option>
         <option value="SemiQuick">SemiQuick</option>
@@ -260,59 +375,69 @@ class ClientAddMapComponent extends React.Component {
 
   renderDistrictS() {
     return (
-      <select onChange={this.changeDistrictS.bind(this)} value={this.state.tempMarkerDetail.districtS}  >
-        <option value="Wong Tai Sin">Wong Tai Sin</option>
-        <option value="Yuen Long">Yuen Long</option>
-        <option value="Kwun Tong">Kwun Tong</option>
-        <option value="Sai Kung">Sai Kung</option>
-        <option value="Kwai Tsing">Kwai Tsing</option>
-        <option value="Outlying Islands">Outlying Islands</option>
-        <option value="North">North</option>
-        <option value="Yau Tsim Mong">Yau Tsim Mong</option>
-        <option value="Tai Po">Tai Po</option>
-        <option value="Sham Shui Po">Sham Shui Po</option>
-        <option value="Tuen Mun">Tuen Mun</option>
-        <option value="Tsuen Wan">Tsuen Wan</option>
-        <option value="Shatin">Shatin</option>
+      <select onChange={(e)=>this.changeDistrictS(e.target.value)} value={this.state.tempMarkerDetail.districtS}  >
+        <option value=""></option>
         <option value="Central and Western">Central and Western</option>
         <option value="Eastern">Eastern</option>
-        <option value="Southern">Southern</option>
-        <option value="Wan Chai">Wan Chai</option>
+        <option value="Fo Tan">Fo Tan</option>
         <option value="Kowloon City">Kowloon City</option>
+        <option value="Kwu Tung">Kwu Tung</option>
+        <option value="Kwun Tong">Kwun Tong</option>
+        <option value="Kwan Tei">Kwan Tei</option>
+        <option value="Kwai Chung">Kwai Chung</option>
+        <option value="Kwai Tsing">Kwai Tsing</option>
+        <option value="Kam Shan">Kam Shan</option>
+        <option value="Lam Tsuen">Lam Tsuen</option>
+        <option value="Mid-level">Mid-level</option>
+        <option value="North">North</option>
+        <option value="Outlying Islands">Outlying Islands</option>
+        <option value="Sai Kung">Sai Kung</option>
+        <option value="Sham Shui Po">Sham Shui Po</option>
+        <option value="Shatin">Shatin</option>
+        <option value="Southern">Southern</option>
+        <option value="Tai Po">Tai Po</option>
+        <option value="Tai Wai">Tai Wai</option>
+        <option value="The Peak">The Peak</option>
+        <option value="Tuen Mun">Tuen Mun</option>
+        <option value="Tsuen Wan">Tsuen Wan</option>
+        <option value="Wan Chai">Wan Chai</option>
+        <option value="Wong Tai Sin">Wong Tai Sin</option>
+        <option value="Yau Tsim Mong">Yau Tsim Mong</option>
+        <option value="Yuen Long">Yuen Long</option>
       </select>
     )
   }
 
-  changeLocation(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, location: e.target.value}});
+  changeLocation(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, location: value}});
   }
 
-  changeAddress(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, address: e.target.value}});
+  changeAddress(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, address: value}});
   }
 
-  changeDistrictL(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, districtL: e.target.value}});
+  changeDistrictL(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, districtL: value}});
   }
 
-  changeDistrictS(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, districtS: e.target.value}});
+  changeDistrictS(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, districtS: value}});
   }
 
-  changeType(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, type: e.target.value}});
+  changeType(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, type: value}});
   }
 
-  changeImg(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, img: e.target.value}});
+  changeImg(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, img: value}});
   }
 
-  changeParkingNo(e){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, parkingNo: e.target.value}});
+  changeParkingNo(value){
+    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, parkingNo: value}});
   }
 
   changeIndex(index){
-    this.setState({tempMarkerDetail: {...this.state.tempMarkerDetail, index: index}});
+    this.setState({markerDetailDialogIndex: index});
   }
 
 }
