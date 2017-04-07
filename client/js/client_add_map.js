@@ -40,20 +40,39 @@ class ClientAddMapComponent extends React.Component {
 
   searchMapDetailByLatLng(nextProps, nextState){
     const {clientAddMarkers} = nextProps.Map;
-    this.state.clientAddMarkersDetail = [];
-    clientAddMarkers.map((clientAddMarker, index)=>{
+    const {clientAddMarkersDetail} = this.state;
+
+    //check the orginial state data(clientAddMarkersDetail) whether not match props data(clientAddMarkers)
+    clientAddMarkers.map((clientAddMarker, propsIndex)=>{
       const {position} = clientAddMarker;
-      const lat = position.lat();
-      const lng = position.lng();
-      fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
-        return response.json();
-      }).then((json)=>{
-        console.log(json);
-        this.state.clientAddMarkersDetail.push({result: json, index: index, lat:lat, lng:lng});
-      }).then(()=>{
-        nextProps.dispatch({type: 'updateClientAddMarkersDetail'});
-      })
-    });
+      const propsLat = position.lat();
+      const propsLng = position.lng();
+
+        const clientAddMarkerDetail = clientAddMarkersDetail.find((clientAddMarkerDetail, stateIndex)=>{
+          const {lng, lat} = clientAddMarkerDetail;
+
+          if (lat == propsLat && lng == propsLng && stateIndex == propsIndex){
+            return true;
+          } else {
+            return false;
+          }
+        });
+
+        if (!clientAddMarkerDetail || clientAddMarkerDetail.result.status !== 'OK'){
+          //CLEAR sTATE DATA
+          this.state.clientAddMarkersDetail[propsIndex] = '';
+
+          fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + propsLat + "," + propsLng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
+            return response.json();
+          }).then((json)=>{
+            console.log(json);
+            this.state.clientAddMarkersDetail[propsIndex] = {result: json, index: propsIndex, lat: propsLat, lng:propsLng};
+          }).then(()=>{
+            nextProps.dispatch({type: 'updateClientAddMarkersDetail'});
+          })
+        }
+
+    })
 
   }
 
