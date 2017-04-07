@@ -27,6 +27,8 @@ class MapComponent extends React.Component {
       return true;
     } else if (nextProps.Map.type=='filterMapItems'){
       return true;
+    } else if (nextProps.Map.type=='uploadClientAddMarkersCompleted'){
+      return true;
     }
 
     //special case for clientMarkers
@@ -50,7 +52,9 @@ class MapComponent extends React.Component {
   componentWillUpdate(nextProps, nextState){
 
     //when get map items success
-    if (nextProps.Map.type == 'getMapItemsSuccess'){
+    if (nextProps.Map.type == 'uploadClientAddMarkersCompleted'){
+      nextState.clientAddMarkers = [];
+    } else if (nextProps.Map.type == 'getMapItemsSuccess'){
       nextState.stations = nextProps.Map.Markers;
       nextProps.dispatch({type:'getMapItemsCompleted'});
       this.initMarker(nextProps, nextState);

@@ -2,6 +2,37 @@
 
 const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
+    case 'uploadClientAddMarkers':
+    try {
+      fetch('http://localhost:81/coursework/api/api.php?format=json&lang=en&action=addClientAddMarkers',{
+        method: "POST",
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'provider='+ encodeURIComponent(action.provider) +'&data='+ encodeURIComponent(JSON.stringify(action.clientAddMarkersDetail))}
+      ).then((response)=>{
+        return response.json();
+      }).then((json)=>{
+          if (json.result === 'true') {
+            alert("Upload Successfully");
+            action.dispatch({type:'uploadClientAddMarkersSuccess' });
+          } else {
+            action.dispatch({type:'uploadClientAddMarkersFail'});
+          }
+      })
+    // console.log(encodeURIComponent(JSON.stringify(action.payload.mapdetails)));
+    } catch (e) {
+      console.log(e);
+      action.dispatch({type:'uploadClientAddMarkersFail'});
+    }
+    return {
+      ...state, type:'uploadClientAddMarkers',
+    }
+    case 'uploadClientAddMarkersSuccess':
+      state.clientAddMarkers.map((clientAddMarker)=>{
+        clientAddMarker.setMap(null);
+      })
+      return {
+        ...state, type: 'uploadClientAddMarkersCompleted' ,clientAddMarkers: []
+      }
     case 'updateClientAddMarkersDetail':
       return {
         ...state, type: 'updateClientAddMarkersDetail',
@@ -126,7 +157,7 @@ const MapStoreReducer = (state=[], action)=> {
         } catch (e) {
           console.log(e);
         }
-        
+
     default:
       return {
         ...state, type: action.type

@@ -6,7 +6,10 @@ require_once './class/Station.php';
 $station = new Station($SQL);
 $admin = new Admin($SQL);
 
-if (isset($_GET['action']) && ($_GET['action'] == 'login' || $_GET['action'] == 'delete_station' || $_GET['action'] == 'update_station')) {
+if (isset($_GET['action']) &&
+  ($_GET['action'] == 'login' || $_GET['action'] == 'delete_station' ||
+   $_GET['action'] == 'update_station' ||
+   ($_GET['action'] == 'addClientAddMarkers' && $_GET['lang'] && $_GET['format']))) {
   switch($_GET['action']){
     case 'login':
       echo $admin->login($_POST['username'], $_POST['password']);
@@ -17,6 +20,9 @@ if (isset($_GET['action']) && ($_GET['action'] == 'login' || $_GET['action'] == 
     case 'update_station':
       echo $admin->update_station($_POST['id'], $_POST['editStation']);
     break;
+    case 'addClientAddMarkers':
+      echo $station->inputClientAddMarkers($_POST['data'], $_POST['provider']);
+      break;
   }
 
 } else {
@@ -27,7 +33,6 @@ if (isset($_GET['action']) && ($_GET['action'] == 'login' || $_GET['action'] == 
       switch($_GET['action']){
         case 'addMapDetail':
           return $station->inputMapDetail($_POST['mapdetails'], $_POST['provider']);
-        break;
       }
   } else {
       $station->output($station->get());

@@ -13,6 +13,44 @@ class Station extends Generate {
       parent::__construct($sql);
     }
 
+    public function inputClientAddMarkers($data, $provider) {
+
+      try {
+        $data_array = json_decode(urldecode($data));
+        $provider = urldecode($provider);
+
+        foreach($data_array as $item){
+          $address = $item->address;
+          $location = $item->location;
+          $districtL = $item->districtL;
+          $districtS = $item->districtS;
+          $img = $item->img;
+          $lat = $item->lat;
+          $lng = $item->lng;
+          $parkingNo = $item->parkingNo;
+          $type = $item->type;
+          $lang = strtoupper($_GET['lang']);
+
+          $query = "INSERT INTO station " .
+          "(address, location, districtL, lat, lng, districtS, provider, type, parkingNo, img, lang) VALUES (" .
+          "'{$address}', '{$location}', '{$districtL}', '{$lat}', '{$lng}', '{$districtS}', '{$provider}', '{$type}', '{$parkingNo}', '{$img}', '{$lang}'" .
+          ");";
+
+          //echo $query;
+
+          $this->sql->query($query);
+        }
+
+        Header('Content-type: text/json');
+        $result = array("error"=>"", "result"=>"true");
+        echo json_encode($result);
+
+      } catch (Exception $e){
+        Header('Content-type: text/json');
+        echo json_encode(array("code" => '1300', "msg" => "Error in service"));
+      }
+    }
+
     public function inputMapDetail($mapdetails, $provider) {
 
       try {

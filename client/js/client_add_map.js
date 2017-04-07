@@ -16,7 +16,7 @@ class ClientAddMapComponent extends React.Component {
       tempMarkerDetail: {
         districtL: '', districtS: '', location: '',
         address: '', type: '', img: '',
-        parkingNo: '', lang: 'EN',
+        parkingNo: ''
       }
     }
   }
@@ -32,6 +32,9 @@ class ClientAddMapComponent extends React.Component {
     } else if (type == 'addClientMarkersSuccess'){
       //get map detail by lat lng through google geo
       this.searchMapDetailByLatLng(nextProps, nextState);
+    } else if (type == 'uploadClientAddMarkersCompleted'){
+      nextState.clientAddMarkersDetail = [];
+      nextState.markerDetailDialogIndex = null;
     }
 
     //to input values to marker detail dialog
@@ -51,8 +54,9 @@ class ClientAddMapComponent extends React.Component {
 
     if (status == 'OK'){
       const {address_components, formatted_address} = results[0];
-      console.log(address_components + " , " + formatted_address);
-      clientAddMarkerDetail.address = formatted_address;
+      //console.log(address_components + " , " + formatted_address);
+      if (!clientAddMarkerDetail.address)
+        clientAddMarkerDetail.address = formatted_address;
 
       let location = "";
       let districtL = "";
@@ -67,17 +71,21 @@ class ClientAddMapComponent extends React.Component {
           }
 
           //districtL case
-          if (index == array.length - 2 && array.length - 2 < 1){
+          if (index == array.length - 2 && array.length - 2 > 1){
             districtL = address_component.long_name;
           }
 
           //districtS case
-          if (index == array.length - 3 && array.length - 2 < 1){
+          if (index == array.length - 3 && array.length - 2 > 1){
             districtS = address_component.long_name;
           }
       })
-      clientAddMarkerDetail.districtS = districtS;
-      clientAddMarkerDetail.districtL = districtL;
+
+      if (!clientAddMarkerDetail.districtS)
+        clientAddMarkerDetail.districtS = districtS;
+      if (!clientAddMarkerDetail.districtL)
+        clientAddMarkerDetail.districtL = districtL;
+      if (!clientAddMarkerDetail.location)
       clientAddMarkerDetail.location = location;
     }
 
@@ -136,7 +144,7 @@ class ClientAddMapComponent extends React.Component {
         //CLEAR sTATE DATA
         this.state.clientAddMarkersDetail[propsIndex] = '';
 
-        fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + propsLat + "," + propsLng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
+        fetch("https://maps.googleapis.com/maps/api/geocode/json?lang=en&latlng=" + propsLat + "," + propsLng +  "&key=AIzaSyC_uk7pUPriJEafftHHGKp4pozIieTegdA").then((response)=>{
           return response.json();
         }).then((json)=>{
           console.log(json);
@@ -147,7 +155,6 @@ class ClientAddMapComponent extends React.Component {
       }
     })
   }
-
 
 //update detail for client added map
   updateClientAddMapDetail(){
@@ -178,12 +185,11 @@ class ClientAddMapComponent extends React.Component {
     } catch (e){
       console.log(e);
     }
-
   }
 
-  verifyProvider(){
-    const reg = /\w{5,}/i;
-    if (this.state.provider.match(reg)){
+  verifyProvider(value=this.state.provider){
+    const reg = /\w{5,}/;
+    if (value.match(reg)){
       this.setState({verifyProvider: true});
       return true;
     } else {
@@ -204,16 +210,21 @@ class ClientAddMapComponent extends React.Component {
 
     //start to verify all map detail
     clientAddMarkersDetail.map((clientAddMarkerDetail, index)=>{
-      verifyAllCase = verifyAllCase && this.verifyClientAddMapDetail(index)
+      verifyAllCase = this.verifyClientAddMapDetail(index) && verifyAllCase;
     });
 
     //start to verify provider
-    verifyAllCase = verifyAllCase && this.verifyProvider();
+    verifyAllCase = this.verifyProvider() && verifyAllCase;
     console.log(verifyAllCase);
+
+    if (verifyAllCase){
+      this.props.dispatch({type:'uploadClientAddMarkers', provider: this.state.provider, clientAddMarkersDetail: this.state.clientAddMarkersDetail, dispatch: this.props.dispatch});
+    }
   }
 
   changeProvider(e){
     this.setState({provider: e.target.value});
+    this.verifyProvider(e.target.value);
   }
 
   openMarkerDetailDialog(index){
@@ -239,27 +250,27 @@ class ClientAddMapComponent extends React.Component {
             <div className="content">
               <div className="content_content table">
                 <div className="row">
-                  <div className="column">Location:</div>
+                  <div className="column">Location*:</div>
                   <div className="column"><input onChange={(e)=>this.changeLocation(e.target.value)} value={this.state.tempMarkerDetail.location} /></div>
                 </div>
                 <div className="row">
-                  <div className="column">Address:</div>
+                  <div className="column">Address*:</div>
                   <div className="column"><input onChange={(e)=>this.changeAddress(e.target.value)} value={this.state.tempMarkerDetail.address} /></div>
                 </div>
                 <div className="row">
-                  <div className="column">District(Long):</div>
+                  <div className="column">District*:</div>
                   <div className="column">
                     {this.renderDistrictL()}
                   </div>
                 </div>
                 <div className="row">
-                  <div className="column">District(Short):</div>
+                  <div className="column">District2*:</div>
                   <div className="column">
                     {this.renderDistrictS()}
                   </div>
                 </div>
                 <div className="row">
-                  <div className="column">Type:</div>
+                  <div className="column">Type*:</div>
                   <div className="column">
                     {this.renderType()}
                   </div>
@@ -330,13 +341,12 @@ class ClientAddMapComponent extends React.Component {
   render(){
     const {clientAddMarkers} = this.props.Map;
     if (clientAddMarkers && clientAddMarkers.length > 0) {
-      //this.verifyProvider();
       return (
         <div className="clientAddMapComponent">
           {this.renderClientAddMarkers()}
-          <div className="inputs">Provider
+          <div className="inputs">Provider*
             <input onChange={this.changeProvider.bind(this)} value={this.state.provider} placeholder="Enter Your Name" />
-            {(this.state.verifyProvider)? <div className="error">Please input more than 5 words</div>:null}
+            {(!this.state.verifyProvider)? <div className="error">Please input more than 5 words</div>:null}
             <button onClick={this.submitClientAddMap.bind(this)}>Submit</button>
           </div>
         </div>
@@ -380,6 +390,8 @@ class ClientAddMapComponent extends React.Component {
         <option value="Central and Western">Central and Western</option>
         <option value="Eastern">Eastern</option>
         <option value="Fo Tan">Fo Tan</option>
+        <option value="Ho Man Tin">Ho Man Tin</option>
+        <option value="Hong Lok Yuen">Hong Lok Yuen</option>
         <option value="Kowloon City">Kowloon City</option>
         <option value="Kwu Tung">Kwu Tung</option>
         <option value="Kwun Tong">Kwun Tong</option>
@@ -388,15 +400,19 @@ class ClientAddMapComponent extends React.Component {
         <option value="Kwai Tsing">Kwai Tsing</option>
         <option value="Kam Shan">Kam Shan</option>
         <option value="Lam Tsuen">Lam Tsuen</option>
+        <option value="Ma Liu Shui">Ma Liu Shui</option>
+        <option value="Ma On Shan">Ma On Shan</option>
         <option value="Mid-level">Mid-level</option>
         <option value="North">North</option>
         <option value="Outlying Islands">Outlying Islands</option>
+        <option value="Pak Shek Kok">Pak Shek Kok</option>
         <option value="Sai Kung">Sai Kung</option>
         <option value="Sham Shui Po">Sham Shui Po</option>
         <option value="Shatin">Shatin</option>
         <option value="Southern">Southern</option>
         <option value="Tai Po">Tai Po</option>
         <option value="Tai Wai">Tai Wai</option>
+        <option value="Tai Mo Shan">Tai Mo Shan</option>
         <option value="The Peak">The Peak</option>
         <option value="Tuen Mun">Tuen Mun</option>
         <option value="Tsuen Wan">Tsuen Wan</option>
