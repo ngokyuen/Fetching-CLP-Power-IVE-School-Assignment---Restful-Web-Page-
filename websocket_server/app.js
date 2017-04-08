@@ -18,6 +18,14 @@ io.on('connection', (socket)=>{
     io.emit('update_client_all_stations', '');
   })
 
+  //notify
+  socket.on('client_submit_markers', ()=>{
+    console.log('client_submit_markers');
+
+    const now = new Date().toString("yyyyMMddHHmmss");
+    io.emit('ws_notify', 'An Guest has added record at ' + now + '. Now You Turn!');
+  })
+
   socket.on('disconnect', ()=>{
     --online_user;
     io.emit('number_online_user', online_user);

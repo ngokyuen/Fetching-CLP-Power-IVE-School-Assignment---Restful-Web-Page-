@@ -36,6 +36,7 @@ class ClientAddMapComponent extends React.Component {
     } else if (type == 'uploadClientAddMarkersCompleted'){
       nextState.clientAddMarkersDetail = [];
       nextState.markerDetailDialogIndex = null;
+      this.props.dispatch({type:'ws_client_submit_markers', socket: nextProps.Page.socket});
     }
 
     //to input values to marker detail dialog

@@ -17,7 +17,7 @@ class MenuContainer extends React.Component {
   }
 
   render(){
-    const {number_online_user} = this.props.Page;
+    const {number_online_user, notify} = this.props.Page;
     return (
       <div className="menuContainer">
         <div className="logoContainer">
@@ -32,6 +32,10 @@ class MenuContainer extends React.Component {
             <li ><a href="./admin.html">Admin</a></li>
           </ul>
         </div>
+
+        {(notify)? <div className="notifyBoard"><img src="./img/notify.png" />{notify}</div>
+        : null}
+
 
         <div className="facebook-like">
           <div className="fb-like " data-href="https://developers.facebook.com/docs/plugins/" data-layout="box_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>

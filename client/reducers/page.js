@@ -13,6 +13,10 @@ const PageStoreReducer = (state=[], action) => {
             action.dispatch({type:'getMapItems', dispatch:action.dispatch});
           })
 
+          socket.on('ws_notify', (data)=>{
+            action.dispatch({type:'ws_notify', notify: data});
+          })
+
         })
 
         return {
@@ -27,6 +31,10 @@ const PageStoreReducer = (state=[], action) => {
       return {
         ...state, type:'connect_ws',
       }
+    case 'ws_notify':
+      return {
+        ...state, type:'ws_notify', notify: action.notify,
+      }
     case 'ws_update_client_all_stations':
       //alert("ws_update_client_all_stations");
       action.socket.emit('update_client_all_stations',true);
@@ -37,6 +45,11 @@ const PageStoreReducer = (state=[], action) => {
     case 'ws_number_online_user':
       return {
         ...state, type:'ws_number_online_user_success', number_online_user: action.number_online_user, socket: action.socket,
+      }
+    case 'ws_client_submit_markers':
+      action.socket.emit('client_submit_markers', true);
+      return {
+        ...state, type:'ws_client_submit_markers'
       }
     case 'go_to_contact_page':
       return {

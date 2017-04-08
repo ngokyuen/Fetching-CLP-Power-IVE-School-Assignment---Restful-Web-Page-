@@ -1,4 +1,14 @@
+.notifyBoard{
+  position: absolute;
+  right: 0px;
+  font-size: 18px;
+}
 
+.notifyBoard img{
+  width: 20px;
+  padding: 5px;
+  vertical-align: bottom;
+}
 
 .menuContainer {
   min-width: 880px;
