@@ -1,7 +1,11 @@
 
 class IndexComponent extends React.Component {
   constructor(props){
-    super(props)
+    super(props);
+  }
+
+  componentDidMount(){
+    this.props.dispatch({type:'connect_ws', dispatch:this.props.dispatch});
   }
 
   render(){
@@ -14,7 +18,6 @@ class IndexComponent extends React.Component {
         <Map store={root} />
         <MapRightFloatShortcut store={root} />
         <ClientAddMap store={root} />
-
       </div>
     );
   }

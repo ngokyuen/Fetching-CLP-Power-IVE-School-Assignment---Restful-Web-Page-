@@ -30,6 +30,10 @@ class AdminEditStationComponent extends React.Component {
       case 'update_station_success':
         nextProps.dispatch({type:'update_station_completed'});
         break;
+      case 'update_station':
+        const {type} = nextProps.Map;
+        nextProps.dispatch({type:'ws_update_client_all_stations', socket:nextProps.Page.socket});
+        break;
     }
   }
 

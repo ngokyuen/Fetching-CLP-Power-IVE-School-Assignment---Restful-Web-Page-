@@ -17,6 +17,7 @@ class MenuContainer extends React.Component {
   }
 
   render(){
+    const {number_online_user} = this.props.Page;
     return (
       <div className="menuContainer">
         <div className="logoContainer">
@@ -25,6 +26,7 @@ class MenuContainer extends React.Component {
 
         <div className="menuButtonContainer">
           <ul className="menuButton">
+            <li ><a href="javascript:;">{(number_online_user)?number_online_user+" guest":null}<img src="./img/guest.png" /></a></li>
             <li ><a href="">Main</a></li>
             <li ><a href="javascript:;" onClick={this.clickContact.bind(this)}>Contact us</a></li>
             <li ><a href="./admin.html">Admin</a></li>

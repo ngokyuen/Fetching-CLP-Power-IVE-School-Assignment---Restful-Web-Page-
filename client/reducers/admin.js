@@ -12,8 +12,9 @@ const AdminStoreReducer = (state=[], action) => {
         }).then(function(response){
           response.json().then(function(json){
             //console.log(json);
-            if (json.result == true)
-              action.dispatch({type:'update_station_success', payload: json});
+            if (json.result == true){
+                action.dispatch({type:'update_station_success', payload: json});
+            }
             else
               action.dispatch({type:'update_station_fail', payload: json});
           });
@@ -143,6 +144,7 @@ const AdminStoreReducer = (state=[], action) => {
         ...state, type:'login_fail', login_result: action.payload.result, token: '', login_error_msg: action.payload.error_msg,
       }
     default:
+    //alert(action.type);
       return {
         ...state, type: action.type,
       }

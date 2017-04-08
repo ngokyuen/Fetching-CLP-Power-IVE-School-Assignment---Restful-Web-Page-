@@ -44,6 +44,13 @@
 }
 
 
+.menuContainer ul li img{
+  vertical-align:top;
+  width: 30px;
+  margin-top: -8px;
+  padding: 4px 8px;
+}
+
 .menuContainer ul li a{
   border-radius: 2px;
   margin: 8px 0px;

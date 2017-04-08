@@ -4,6 +4,12 @@ class AdminComponent extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    this.props.dispatch({type:'connect_ws', dispatch:this.props.dispatch});
+  }
+
+
+
   render(){
     const root = RootReducerStore;
     const {login_result} = this.props.Admin;
