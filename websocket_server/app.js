@@ -23,7 +23,7 @@ io.on('connection', (socket)=>{
     console.log('client_submit_markers');
 
     const now = new Date();
-    io.emit('ws_notify', 'An Guest has added record at ' + now + '. Now You Turn!');
+    io.emit('ws_notify', 'An Guest has added record at ' + now + '. Now Your Turn!');
   })
 
   socket.on('disconnect', ()=>{
