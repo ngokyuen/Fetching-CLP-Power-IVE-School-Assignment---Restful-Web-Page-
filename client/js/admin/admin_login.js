@@ -36,7 +36,7 @@ class AdminLoginComponent extends React.Component {
             <div className="input">
               <input type="password" value={this.state.password} onChange={(e)=>this.changePassword(e)} name="password" placeholder="Password" />
             </div>
-            { (this.props.Admin.login_result == false)? <div>{this.props.Admin.login_error_msg}</div> : null}
+            { (this.props.Admin.login_result == false)? <div className="error">{this.props.Admin.login_error_msg}</div> : null}
             <div className="input">
               <input onClick={(e)=>this.clickLoginButton(e)} type="button" value="Sign in" />
             </div>
