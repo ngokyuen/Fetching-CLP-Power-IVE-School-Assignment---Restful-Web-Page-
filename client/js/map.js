@@ -193,12 +193,12 @@ class MapComponent extends React.Component {
   });
 
 
-  var pointA,
-  pointB,
+  var pointA,markerA,
+  pointB,markerB,
   directionsService = new google.maps.DirectionsService,
   directionsDisplay = new google.maps.DirectionsRenderer({
             map: map
-          });
+          })
 
   map.addListener('rightclick', (e)=>{
 
@@ -209,8 +209,21 @@ class MapComponent extends React.Component {
 
     if (pointA == undefined){
       pointA = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+
+      markerA = new google.maps.Marker({
+        position: e.latLng,
+        map: this.state.map,
+        label: "A",
+      });
+
     } else if (pointB == undefined){
       pointB = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+
+      markerB = new google.maps.Marker({
+        position: e.latLng,
+        map: this.state.map,
+        label: "B",
+      });
     }
 
     if (pointA !== undefined && pointB !== undefined){
@@ -224,6 +237,8 @@ class MapComponent extends React.Component {
         } else {
           window.alert('Directions request failed due to ' + status);
         }
+        markerA.setMap(null);
+        markerB.setMap(null);
       });
     }
 
