@@ -145,10 +145,13 @@ class MapComponent extends React.Component {
 
   //start to render the map
   initMap(){
+
+
     const map = new google.maps.Map(this.refs.map, {
       center: {lat: 22.4, lng: 114.3000},
       zoom: 11
     });
+
 
     //add place autocomplete
     const input = document.getElementById('pac-input');
@@ -188,6 +191,44 @@ class MapComponent extends React.Component {
       //     place.formatted_address + '</div>');
       // infowindow.open(map, marker);
   });
+
+
+  var pointA,
+  pointB,
+  directionsService = new google.maps.DirectionsService,
+  directionsDisplay = new google.maps.DirectionsRenderer({
+            map: map
+          });
+
+  map.addListener('rightclick', (e)=>{
+
+    if (pointA !== undefined && pointB !== undefined){
+      pointA = undefined;
+      pointB = undefined;
+    }
+
+    if (pointA == undefined){
+      pointA = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+    } else if (pointB == undefined){
+      pointB = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+    }
+
+    if (pointA !== undefined && pointB !== undefined){
+      directionsService.route({
+        origin: pointA,
+        destination: pointB,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+    }
+
+
+  })
 
     //client click new map marker
     map.addListener('click', (e)=>{
