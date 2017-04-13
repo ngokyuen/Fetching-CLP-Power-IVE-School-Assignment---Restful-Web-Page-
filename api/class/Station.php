@@ -168,6 +168,8 @@ class Station extends Generate {
 
     public function importURLRequest($_gets) {
 
+
+
       if (isset($_gets['format']) && $_gets['format'] != "") {
         $this->setFormat($_gets['format']);
       }
@@ -190,6 +192,16 @@ class Station extends Generate {
         $this->setSearchMapDetailByLatLng($_gets['searchMapDetailByLatLng']);
       }
 
+
+      //missing format or lang
+      if (!$this->format){
+        $this->setFormat('xml');
+      }
+      if (!$this->lang){
+        $this->setLanguage('en');
+      }
+
+      //params error
       foreach ($_gets as $key => $value) {
         if ($key != "no" && $key != "address" && $key != "format" && $key != "lang" &&
          $key != "searchMapKeyword" && $key != "searchMapDetailByLatLng" && $key != "searchMapDetailByPlaceId" && $key != "action") {
@@ -197,6 +209,14 @@ class Station extends Generate {
         }
       }
 
+      //empty case
+      if (!isset($_gets) || count($_gets) == 0){
+          $this->setFormat('xml');
+          $this->setLanguage('en');
+          return array("code" => "1100", "msg" => "Required parameter is missing");
+      }
+
+      //params missing
       if (!$this->format || !$this->lang) {
         return array("code" => "1100", "msg" => "Required parameter is missing");
       }

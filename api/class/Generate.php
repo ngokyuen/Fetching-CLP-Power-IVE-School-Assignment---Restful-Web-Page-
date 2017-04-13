@@ -13,7 +13,7 @@ class Generate extends Basic {
         $this->lang = $lang;
     }
 
-    protected function setFormat($format) {
+    public function setFormat($format) {
         $this->format = $format;
     }
 
