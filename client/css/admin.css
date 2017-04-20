@@ -3,6 +3,11 @@ html, body { width:100%; height: 100%; background-color: #d9d9d9; border: 0; pad
   white-space: nowrap;}
 input, button { border: 0; padding: 0; margin: 0;}
 
+#content {
+  width: 100%;
+  height: 100%;
+}
+
 .error {
   color: red;
   text-align: center;
@@ -19,7 +24,7 @@ input, button { border: 0; padding: 0; margin: 0;}
 
 /* real width */
 .filterContainer {
-  width: 100%;
+  width: 1690px;
   background-color: #e6e6e6;
   padding: 5px 0 5px 5px;
   border: 1px solid #b3b3b3;
@@ -98,10 +103,6 @@ input, button { border: 0; padding: 0; margin: 0;}
 }
 
 .stationListContainer {
-  position: absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
 }
 
 .stationListContainer .title {
@@ -141,7 +142,7 @@ input, button { border: 0; padding: 0; margin: 0;}
 
 /*real width*/
 .stationList {
-  width:100%;
+  width: 1724px;
   height: 800px;
   overflow-y: scroll;
   overflow-x: hidden;
