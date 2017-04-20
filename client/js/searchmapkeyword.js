@@ -26,7 +26,7 @@ class SearchMapKeywordComponent extends React.Component {
 
   async feedGetMapDetailByPlaceId(place_id){
     try {
-      const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapDetailByPlaceId=" + place_id);
+      const query = await fetch("../api/api.php?format=json&lang=en&searchMapDetailByPlaceId=" + place_id);
       const response = await query.json();
       this.props.dispatch({type:'addMapListItem', payload: response});
       console.log(response);
@@ -37,7 +37,7 @@ class SearchMapKeywordComponent extends React.Component {
 
   async feedSearchMapKeyword(keyword){
     try {
-      const query = await fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en&searchMapKeyword=" + keyword);
+      const query = await fetch("../api/api.php?format=json&lang=en&searchMapKeyword=" + keyword);
       const response = await query.json();
       this.setState({searchMapKeywordResult: response});
       console.log(response);

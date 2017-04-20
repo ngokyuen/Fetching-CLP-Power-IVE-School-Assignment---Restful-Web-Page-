@@ -113,7 +113,7 @@ class Station extends Generate {
       if (isset($this->no) && $this->no != ''){
         return $this->getStation(" no=" . $this->no);
       } else {
-        if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'http://localhost:81/coursework/client/admin.html')
+        if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'http://localhost/coursework/client/admin.html')
           return $this->getAllStations_Admin();
         else
           return $this->getAllStations_Client();

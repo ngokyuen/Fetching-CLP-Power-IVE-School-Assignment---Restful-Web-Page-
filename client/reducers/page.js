@@ -3,7 +3,7 @@ const PageStoreReducer = (state=[], action) => {
   switch (action.type){
     case 'connect_ws':
       try {
-        const socket = io.connect('http://localhost:82');
+        const socket = io.connect('http://localhost:8080');
         socket.on('connect', ()=>{
           socket.on('number_online_user', (data)=>{
               action.dispatch({type:'ws_number_online_user', number_online_user: data, socket: socket});

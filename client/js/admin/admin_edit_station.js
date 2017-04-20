@@ -41,10 +41,10 @@ class AdminEditStationComponent extends React.Component {
   importStation(nextProps){
     try {
       const {load_station_result} = nextProps.Admin;
-      if (load_station_result != null){
-        const {stationList} = load_station_result;
-        if (stationList != null){
-          const {station} = stationList;
+      if (load_station_result != null && load_station_result.length > 0){
+        // const {stationList} = load_station_result;
+        // if (stationList != null){
+          const station = load_station_result[0];
             this.setState({address: station.address});
             this.setState({districtL: station.districtL});
             this.setState({districtS: station.districtS});
@@ -58,7 +58,7 @@ class AdminEditStationComponent extends React.Component {
             this.setState({parkingNo: station.parkingNo});
             this.setState({provider: station.provider});
             this.setState({type: station.type});
-          }
+          // }
         }
       } catch (e) {
       console.log(e);
@@ -91,10 +91,10 @@ class AdminEditStationComponent extends React.Component {
     try {
       //check the value of load_station_result
       const {load_station_result} = this.props.Admin;
-      if (load_station_result != null){
-        const {stationList} = load_station_result;
-        if (stationList != null){
-          const {station} = stationList;
+      if (load_station_result != null && load_station_result.length > 0){
+        // const {stationList} = load_station_result;
+        // if (stationList != null){
+          const station = load_station_result[0];
           //get the largest element width & height
           // const style = {width: document.getElementById('stationList').clientWidth,
           //  height: document.getElementById('container').clientHeight};
@@ -166,9 +166,9 @@ class AdminEditStationComponent extends React.Component {
                   </div>
               </div>
             )
-          } else {
-            return null;
-          }
+          // } else {
+          //   return null;
+          // }
       }  else {
         return null;
       }

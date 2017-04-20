@@ -25,8 +25,8 @@ class AdminStationListComponent extends React.Component {
     this.reload();
   }
 
-  clickStation(no){
-    this.props.dispatch({type:'load_station', no: no, dispatch: this.props.dispatch});
+  clickStation(_id){
+    this.props.dispatch({type:'load_station', _id: _id, dispatch: this.props.dispatch});
   }
 
   clickReload(){
@@ -133,9 +133,9 @@ class AdminStationListComponent extends React.Component {
     try {
       const {load_stations_result} = this.props.Admin;
       if (load_stations_result != null){
-        const {stationList} = load_stations_result;
-        if (load_stations_result != null && stationList.station.length > 0){
-          let stations = stationList.station;
+        //const {stationList} = load_stations_result;
+        if (load_stations_result != null && load_stations_result.length > 0){
+          let stations = load_stations_result;
           const filterStations = this.filterStations(stations);
           return (
             <div>
@@ -148,8 +148,8 @@ class AdminStationListComponent extends React.Component {
                   {filterStations.map((station, index) => {
                     const cell_style = (index%2==0)?"cell cell1":"cell cell2";
                     return (
-                      <div onClick={this.clickStation.bind(this, station.no)} className="row" key={station.no}>
-                        <div className={cell_style}>{station._id}</div><div className={cell_style}>{station.no}</div>
+                      <div onClick={this.clickStation.bind(this, station._id)} className="row" key={station._id}>
+                        <div className={cell_style}>{station._id}</div><div className={cell_style}>{station._id}</div>
                         <div className={cell_style}>{station.location}</div><div className={cell_style}>{station.lat}</div>
                         <div className={cell_style}>{station.lng}</div><div className={cell_style}>{station.type}</div>
                         <div className={cell_style}>{station.districtL}</div><div className={cell_style}>{station.districtS}</div>

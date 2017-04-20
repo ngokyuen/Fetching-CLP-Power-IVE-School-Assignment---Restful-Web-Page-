@@ -4,9 +4,9 @@ const AdminStoreReducer = (state=[], action) => {
     case 'update_station':
       try {
         const url_string = "id=" + encodeURIComponent(action.id) + "&editStation=" + encodeURIComponent(action.editStation);
-        fetch ("http://localhost:81/coursework/api/api.php?action=update_station",
+        fetch ("../api/stations/admin/" + action.id,
         {
-          method: "POST",
+          method: "PUT",
           headers: {'Content-Type':'application/x-www-form-urlencoded'},
           body: url_string,
         }).then(function(response){
@@ -35,7 +35,9 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'delete_station':
       try {
-        fetch("http://localhost:81/coursework/api/api.php?action=delete_station&id="+action.id).then(function(response){
+        fetch("../api/stations/admin/"+action.id, {
+          method: "DELETE"
+        }).then(function(response){
           response.json().then(function(json){
             if (json.result == true)
               action.dispatch({type:'delete_station_success'});
@@ -60,7 +62,7 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'load_station':
       try {
-        fetch("http://localhost:81/coursework/api/api.php?no=" + action.no + "&format=json&lang=en").then(function(response){
+        fetch("../api/stations/admin/" + action._id).then(function(response){
           response.json().then(function(json){
             if (json){
               action.dispatch({type:'load_station_success', payload:json});
@@ -90,7 +92,7 @@ const AdminStoreReducer = (state=[], action) => {
       }
     case 'load_stations':
       try {
-        fetch("http://localhost:81/coursework/api/api.php?format=json&lang=en").then(function(response){
+        fetch("../api/stations/admin").then(function(response){
           response.json().then(function(json){
             if (json)
               action.dispatch({type:'load_stations_success', payload:json});
@@ -115,7 +117,7 @@ const AdminStoreReducer = (state=[], action) => {
     case 'login':
       try {
         const url_string = "username=" + encodeURIComponent(action.payload.username) + "&password=" + encodeURIComponent(action.payload.password);
-        fetch ("http://localhost:81/coursework/api/api.php?action=login",
+        fetch ("../api/login",
         {
           method: "POST",
           headers: {'Content-Type':'application/x-www-form-urlencoded'},

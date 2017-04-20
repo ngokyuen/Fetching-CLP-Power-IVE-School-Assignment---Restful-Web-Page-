@@ -4,7 +4,7 @@ const MapStoreReducer = (state=[], action)=> {
   switch (action.type){
     case 'uploadClientAddMarkers':
     try {
-      fetch('http://localhost:81/coursework/api/api.php?format=json&lang=en&action=addClientAddMarkers',{
+      fetch('../api/stations',{
         method: "POST",
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: 'provider='+ encodeURIComponent(action.provider) +'&data='+ encodeURIComponent(JSON.stringify(action.clientAddMarkersDetail))}
@@ -93,10 +93,10 @@ const MapStoreReducer = (state=[], action)=> {
 
     case 'getMapItems':
       try {
-         fetch ("http://localhost:81/coursework/api/api.php?format=json&lang=en").then((response)=>{
+         fetch ("../api/stations").then((response)=>{
            response.json().then((json)=>{
              console.log(json);
-             action.dispatch({type: 'getMapItemsSuccess', Markers:json.stationList.station});
+             action.dispatch({type: 'getMapItemsSuccess', Markers:json});
            });
          });
       } catch (e){
@@ -136,7 +136,7 @@ const MapStoreReducer = (state=[], action)=> {
 
     case 'addMapListItemsToApi':
         try {
-          fetch('http://localhost:81/coursework/api/api.php?format=json&lang=en&action=addMapDetail',{
+          fetch('../api/api.php?format=json&lang=en&action=addMapDetail',{
             method: "POST",
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
             body: 'provider='+ encodeURIComponent(action.payload.provider) +'&mapdetails='+ encodeURIComponent(JSON.stringify(action.payload.mapdetails))}
